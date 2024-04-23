@@ -1,0 +1,2 @@
+// Package gocheckerror -.
+package gocheckerror

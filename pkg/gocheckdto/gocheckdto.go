@@ -1,0 +1,2 @@
+// Package gocheckdto -.
+package gocheckdto

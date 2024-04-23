@@ -1,0 +1,2 @@
+// Package gocheckhttp -.
+package gocheckhttp

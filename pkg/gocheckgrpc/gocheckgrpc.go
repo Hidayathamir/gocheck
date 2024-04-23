@@ -1,0 +1,2 @@
+// Package gocheckgrpc -.
+package gocheckgrpc

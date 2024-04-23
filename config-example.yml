@@ -1,0 +1,30 @@
+app:
+  name: "string"
+  version: "string"
+  environment: "string"
+
+http:
+  host: "string"
+  port: "string"
+
+grpc:
+  host: "string"
+  port: "string"
+
+logger:
+  log_level: "string"
+
+postgres:
+  username: "string"
+  password: "string"
+  host: "string"
+  port: "string"
+  db_name: "string"
+
+redis:
+  host: "string"
+  port: "string"
+
+jwt:
+  expire_hour: 0
+  signed_key: "string"

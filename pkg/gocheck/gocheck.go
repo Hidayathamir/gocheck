@@ -1,0 +1,2 @@
+// Package gocheck -.
+package gocheck
