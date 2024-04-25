@@ -1,4 +1,5 @@
-package gocheckhttpmiddleware
+// Package middleware -.
+package middleware
 
 import (
 	"encoding/json"

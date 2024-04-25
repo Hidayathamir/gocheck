@@ -5,9 +5,9 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/dto"
+	"github.com/Hidayathamir/gocheck/internal/transport/grpc/middleware"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
-	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpcmiddleware"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 )
 
@@ -31,7 +31,7 @@ func NewDigitalWallet(cfg config.Config, usecaseDigitalWallet usecase.IDigitalWa
 
 // Transfer implements gocheckgrpc.DigitalWalletServer.
 func (d *DigitalWallet) Transfer(ctx context.Context, req *gocheckgrpc.ReqDigitalWalletTransfer) (*gocheckgrpc.ResDigitalWalletTransfer, error) {
-	auth, err := gocheckgrpcmiddleware.GetAuthFromCtx(ctx)
+	auth, err := middleware.GetAuthFromCtx(ctx)
 	if err != nil {
 		return nil, trace.Wrap(err)
 	}
