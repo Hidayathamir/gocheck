@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 
+	"github.com/Hidayathamir/gocheck/pkg/gocheck"
 	"github.com/Hidayathamir/gocheck/pkg/h"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
@@ -35,9 +37,9 @@ func (d *DigitalWalletClient) getURLTransfer() string {
 ////////////////////////////////////////
 
 // Transfer -.
-func (d *DigitalWalletClient) Transfer(ctx context.Context, req ReqDigitalWalletTransfer) (HTTPResponse[ResDigitalWalletTransfer], error) {
-	fail := func(err error) (HTTPResponse[ResDigitalWalletTransfer], error) {
-		return HTTPResponse[ResDigitalWalletTransfer]{}, trace.Wrap(err, trace.WithSkip(1))
+func (d *DigitalWalletClient) Transfer(ctx context.Context, auth gocheck.Authorization, req ReqDigitalWalletTransfer) (ResDataDigitalWalletTransfer, error) {
+	fail := func(err error) (ResDataDigitalWalletTransfer, error) {
+		return ResDataDigitalWalletTransfer{}, trace.Wrap(err, trace.WithSkip(1))
 	}
 
 	jsonByte, err := json.Marshal(req)
@@ -51,6 +53,13 @@ func (d *DigitalWalletClient) Transfer(ctx context.Context, req ReqDigitalWallet
 	}
 
 	httpReq.Header.Add(h.ContentType, h.APPJSON)
+
+	jsonByte, err = json.Marshal(auth)
+	if err != nil {
+		return fail(err)
+	}
+
+	httpReq.Header.Add(h.Authorization, string(jsonByte))
 
 	httpClient := &http.Client{}
 	httpRes, err := httpClient.Do(httpReq)
@@ -75,10 +84,11 @@ func (d *DigitalWalletClient) Transfer(ctx context.Context, req ReqDigitalWallet
 		return fail(err)
 	}
 
-	res := HTTPResponse[ResDigitalWalletTransfer]{
-		Body:       resBody,
-		StatusCode: httpRes.StatusCode,
+	isStatusCode2xx := string(httpRes.Status[0]) == "2"
+	if !isStatusCode2xx || resBody.Error != "" {
+		err := errors.New(resBody.Error)
+		return fail(err)
 	}
 
-	return res, nil
+	return resBody.Data, nil
 }

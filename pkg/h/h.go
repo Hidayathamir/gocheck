@@ -1,8 +1,13 @@
-// Package h -.
+// Package h contains header keyword for http.
 package h
 
-// ContentType -.
-const ContentType = "Content-Type"
+const (
+	// ContentType -.
+	ContentType = "Content-Type"
+
+	// Authorization -.
+	Authorization = "Authorization"
+)
 
 // APPJSON -.
 const APPJSON = "application/json"

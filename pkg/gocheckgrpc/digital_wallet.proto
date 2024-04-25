@@ -9,7 +9,6 @@ service DigitalWallet {
 }
 
 message ReqDigitalWalletTransfer {
-    uint64 sender_id = 1;
     uint64 recipient_id = 2;
     int64  amount = 3;
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/dto"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
+	"github.com/Hidayathamir/gocheck/pkg/gocheckhttpmiddleware"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/gin-gonic/gin"
 )
@@ -27,9 +28,16 @@ func NewDigitalWallet(cfg config.Config, usecaseDigitalWallet usecase.IDigitalWa
 
 // Transfer -.
 func (d *DigitalWallet) Transfer(c *gin.Context) {
-	req := gocheckhttp.ReqDigitalWalletTransfer{}
+	auth, err := gocheckhttpmiddleware.GetAuthFromGinCtxHeader(c)
+	if err != nil {
+		err := trace.Wrap(err)
+		res := gocheckhttp.ResDigitalWalletTransfer{Error: err.Error()}
+		c.JSON(http.StatusUnauthorized, res)
+		return
+	}
 
-	err := c.ShouldBindJSON(&req)
+	req := gocheckhttp.ReqDigitalWalletTransfer{}
+	err = c.ShouldBindJSON(&req)
 	if err != nil {
 		err := trace.Wrap(err)
 		res := gocheckhttp.ResDigitalWalletTransfer{Error: err.Error()}
@@ -38,7 +46,7 @@ func (d *DigitalWallet) Transfer(c *gin.Context) {
 	}
 
 	reqTransfer := dto.ReqTransfer{
-		SenderID:    req.SenderID,
+		SenderID:    auth.UserID,
 		RecipientID: req.RecipientID,
 		Amount:      req.Amount,
 	}

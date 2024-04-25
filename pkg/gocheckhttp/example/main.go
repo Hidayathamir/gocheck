@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 
+	"github.com/Hidayathamir/gocheck/pkg/gocheck"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
@@ -12,16 +13,20 @@ import (
 func main() {
 	base := "http://localhost:10010"
 
-	gocheckhttpDigitalWalletClient := gocheckhttp.NewDigitalWalletClient(base)
+	client := gocheckhttp.NewDigitalWalletClient(base)
+
+	ctx := context.Background()
+	auth := gocheck.Authorization{UserID: 1}
+
 	req := gocheckhttp.ReqDigitalWalletTransfer{
-		SenderID:    1,
 		RecipientID: 2,      //nolint:gomnd
 		Amount:      500000, //nolint:gomnd
 	}
-	res, err := gocheckhttpDigitalWalletClient.Transfer(context.Background(), req)
+
+	res, err := client.Transfer(ctx, auth, req)
 	fatalIfErr(err)
 
-	logrus.Info(res.Body)
+	logrus.Info(res)
 }
 
 func fatalIfErr(err error) {

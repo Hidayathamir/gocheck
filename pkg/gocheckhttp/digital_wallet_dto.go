@@ -2,7 +2,6 @@ package gocheckhttp
 
 // ReqDigitalWalletTransfer -.
 type ReqDigitalWalletTransfer struct {
-	SenderID    uint `json:"sender_id"`
 	RecipientID uint `json:"recipient_id"`
 	Amount      int  `json:"amount"`
 }
