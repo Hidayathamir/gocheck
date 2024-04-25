@@ -25,10 +25,6 @@ redis:
   host: "string"
   port: "string"
 
-jwt:
-  expire_hour: 0
-  signed_key: "string"
-
 migration:
   auto: true
   required: true

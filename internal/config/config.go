@@ -129,16 +129,6 @@ func (c *Config) GetRedisPort() string {
 	return c.GetString("redis.port")
 }
 
-// GetJWTExpireHour -.
-func (c *Config) GetJWTExpireHour() int {
-	return c.GetInt("jwt.expire_hour")
-}
-
-// GetJWTSignedKey -.
-func (c *Config) GetJWTSignedKey() string {
-	return c.GetString("jwt.signed_key")
-}
-
 // GetMigrationAuto -.
 func (c *Config) GetMigrationAuto() bool {
 	return c.GetBool("migration.auto")
