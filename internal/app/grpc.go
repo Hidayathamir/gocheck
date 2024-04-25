@@ -7,7 +7,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 	transportgrpc "github.com/Hidayathamir/gocheck/internal/transport/grpc"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
-	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
+	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
 	"google.golang.org/grpc"
 )
 

@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/Hidayathamir/gocheck/pkg/gocheck"
+	"github.com/Hidayathamir/gocheck/pkg/gocheckhttpmiddleware"
 	"github.com/Hidayathamir/gocheck/pkg/h"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
@@ -37,7 +37,7 @@ func (d *DigitalWalletClient) getURLTransfer() string {
 ////////////////////////////////////////
 
 // Transfer -.
-func (d *DigitalWalletClient) Transfer(ctx context.Context, auth gocheck.Authorization, req ReqDigitalWalletTransfer) (ResDataDigitalWalletTransfer, error) {
+func (d *DigitalWalletClient) Transfer(ctx context.Context, auth gocheckhttpmiddleware.Authorization, req ReqDigitalWalletTransfer) (ResDataDigitalWalletTransfer, error) {
 	fail := func(err error) (ResDataDigitalWalletTransfer, error) {
 		return ResDataDigitalWalletTransfer{}, trace.Wrap(err, trace.WithSkip(1))
 	}

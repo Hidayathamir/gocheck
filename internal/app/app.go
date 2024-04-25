@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/repo/cache"
@@ -50,7 +51,7 @@ func Run() { //nolint:funlen
 		lis, err := net.Listen("tcp", addr)
 		fatalIfErr(err)
 
-		logrus.WithField("address", addr).Info("run grpc server")
+		logrus.WithField("address", addr).Info("grpc server running 🟢")
 		err = grpcServer.Serve(lis)
 		fatalIfErr(err)
 	}()
@@ -68,7 +69,7 @@ func Run() { //nolint:funlen
 			Handler: ginEngine,
 		}
 
-		logrus.WithField("address", addr).Info("run http server")
+		logrus.WithField("address", addr).Info("http server running 🟢")
 		err := httpServer.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
 			logrus.Fatal(trace.Wrap(err))
@@ -86,16 +87,33 @@ func Run() { //nolint:funlen
 
 	var gracefulShutdownWG sync.WaitGroup
 
-	logrus.Info("shutting down gracefully grpc server")
 	gracefulShutdownWG.Add(1)
 	go func() {
+		logrus.Info("shutting down gracefully grpc server")
+		defer gracefulShutdownWG.Done()
+
 		grpcServer.GracefulStop()
-		gracefulShutdownWG.Done()
+
+		logrus.Info("shutting down gracefully grpc server done 🟢")
+	}()
+
+	gracefulShutdownWG.Add(1)
+	go func() {
+		logrus.Info("shutting down gracefully http server")
+		defer gracefulShutdownWG.Done()
+
+		logrus.Info("inform http server it has 10 seconds to finish the request it is currently handling")
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second) //nolint:gomnd
+		defer cancel()
+		err = httpServer.Shutdown(ctx)
+		fatalIfErr(err)
+
+		logrus.Info("shutting down gracefully http server done 🟢")
 	}()
 
 	logrus.Info("wait graceful shutdown finish")
 	gracefulShutdownWG.Wait()
-	logrus.Info("graceful shutdown finish")
+	logrus.Info("graceful shutdown done 🟢")
 }
 
 func fatalIfErr(err error) {

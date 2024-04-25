@@ -7,8 +7,8 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/dto"
 	"github.com/Hidayathamir/gocheck/internal/transport/grpc/middleware"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
-	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
+	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
 )
 
 // DigitalWallet -.

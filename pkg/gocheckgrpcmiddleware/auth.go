@@ -4,14 +4,18 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/Hidayathamir/gocheck/pkg/gocheck"
 	"github.com/Hidayathamir/gocheck/pkg/m"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"google.golang.org/grpc/metadata"
 )
 
+// Authorization -.
+type Authorization struct {
+	UserID uint `json:"user_id"`
+}
+
 // SetAuthToCtx -.
-func SetAuthToCtx(ctx context.Context, auth gocheck.Authorization) (context.Context, error) {
+func SetAuthToCtx(ctx context.Context, auth Authorization) (context.Context, error) {
 	jsonByte, err := json.Marshal(auth)
 	if err != nil {
 		return nil, trace.Wrap(err)

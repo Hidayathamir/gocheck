@@ -5,10 +5,9 @@ import (
 	"context"
 	"net"
 
-	"github.com/Hidayathamir/gocheck/pkg/gocheck"
-	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpcmiddleware"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
+	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -23,10 +22,12 @@ func main() {
 		warnIfErr(err)
 	}()
 
+	// new digital wallet client grpc
 	client := gocheckgrpc.NewDigitalWalletClient(conn)
 
+	// prepare request
 	ctx := context.Background()
-	auth := gocheck.Authorization{UserID: 1}
+	auth := gocheckgrpcmiddleware.Authorization{UserID: 1}
 	ctx, err = gocheckgrpcmiddleware.SetAuthToCtx(ctx, auth)
 	fatalIfErr(err)
 
@@ -35,10 +36,12 @@ func main() {
 		Amount:      10000,
 	}
 
+	// hit api digital wallet transfer via grpc
 	res, err := client.Transfer(ctx, req)
 	fatalIfErr(err)
 
-	logrus.Info(res)
+	// print response
+	logrus.Info("transfer id = ", res.GetId())
 }
 
 func fatalIfErr(err error) {
