@@ -1,0 +1,47 @@
+networks:
+  gocheck:
+    driver: bridge
+
+services:
+  gocheck-app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: gocheck-app-container
+    depends_on:
+      - gocheck-db-postgres
+      - gocheck-cache-redis
+    environment:
+      APP_ENVIRONMENT: prod
+      HTTP_HOST: 0.0.0.0
+      GRPC_HOST: 0.0.0.0
+      POSTGRES_HOST: gocheck-db-postgres-container # use docker network gocheck postgres host
+      POSTGRES_PORT: 5432                          # use docker network gocheck postgres port
+      REDIS_HOST: gocheck-cache-redis-container    # use docker network gocheck redis host
+      REDIS_PORT: 6379                             # use docker network gocheck redis port
+    image: gocheck-app
+    networks:
+      - gocheck
+    ports:
+      - '10010:10010' # expose container http server to host on 10010
+      - '11010:11010' # expose container grpc server to host on 11010
+
+  gocheck-db-postgres:
+    container_name: gocheck-db-postgres-container
+    environment:
+      POSTGRES_DB: playground
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+    image: 'postgres:16.2'
+    networks:
+      - gocheck
+    ports:
+      - '5010:5432' # expose container postgres to host on 5010
+
+  gocheck-cache-redis:
+    image: 'redis:7.2.4'
+    container_name: gocheck-cache-redis-container
+    networks:
+      - gocheck
+    ports:
+      - '6010:6379' # expose container redis to host on 6010

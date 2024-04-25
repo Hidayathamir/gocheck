@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
-	"github.com/Hidayathamir/gocheck/internal/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 )
@@ -23,31 +23,32 @@ func NewRedis(cfg config.Config) (*Redis, error) {
 	addr := net.JoinHostPort(cfg.GetRedisHost(), cfg.GetRedisPort())
 
 	var redisClient *redis.Client
-	var err error
-	for i := 0; i < 10; i++ {
+	var errInitRedis error
+	const maxAttemptInitRedis = 10
+	for i := 0; i < maxAttemptInitRedis; i++ {
 		redisClient = redis.NewClient(&redis.Options{Addr: addr})
-		err = redisClient.Ping(context.Background()).Err()
-		if err != nil {
-			err := fmt.Errorf("error ping redis: %w", err)
-			logrus.
-				WithField("attempt count", i+1).
-				Warn(trace.Wrap(err))
 
-			time.Sleep(time.Second)
-
-			continue
+		errInitRedis = redisClient.Ping(context.Background()).Err()
+		if errInitRedis == nil {
+			break
 		}
-		break
-	}
 
-	if err != nil {
-		err := fmt.Errorf("error 10 times when try to connect to redis: %w", err)
-		return nil, trace.Wrap(err)
-	}
+		errInitRedis = fmt.Errorf("error ping redis: %w", errInitRedis)
 
-	logrus.Info("success create redis connection 🟢")
+		logrus.
+			WithField("attempt left", maxAttemptInitRedis-i-1).
+			Warn(trace.Wrap(errInitRedis))
+
+		time.Sleep(time.Second)
+	}
+	if errInitRedis != nil {
+		errInitRedis := fmt.Errorf("error ping redis %d times: %w", maxAttemptInitRedis, errInitRedis)
+		return nil, trace.Wrap(errInitRedis)
+	}
 
 	redis := &Redis{client: redisClient}
+
+	logrus.Info("success create redis connection 🟢")
 
 	return redis, nil
 }

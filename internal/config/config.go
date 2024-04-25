@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Hidayathamir/gocheck/internal/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/spf13/viper"
 )
 
@@ -13,11 +13,9 @@ import (
 type Config struct{ *viper.Viper }
 
 // Load loads config.yml and env var.
-func Load() (*Config, error) {
+func Load(configPath string) (*Config, error) {
 	v := viper.New()
-	v.SetConfigType("yml")
-	v.AddConfigPath(".")
-	v.SetConfigName("config")
+	v.SetConfigFile(configPath)
 
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
@@ -42,13 +40,15 @@ func (c *Config) Validate() error {
 	switch c.GetAppEnvironment() {
 	case "dev", "prod":
 	default:
-		return fmt.Errorf("unknown app environment '%s'", c.GetAppEnvironment())
+		err := fmt.Errorf("unknown app environment '%s'", c.GetAppEnvironment())
+		return trace.Wrap(err)
 	}
 
 	switch c.GetLoggerLogLevel() {
 	case "panic", "fatal", "error", "warn", "warning", "info", "debug", "trace":
 	default:
-		return fmt.Errorf("unknown logger log level '%s'", c.GetLoggerLogLevel())
+		err := fmt.Errorf("unknown logger log level '%s'", c.GetLoggerLogLevel())
+		return trace.Wrap(err)
 	}
 
 	return nil
@@ -137,4 +137,14 @@ func (c *Config) GetJWTExpireHour() int {
 // GetJWTSignedKey -.
 func (c *Config) GetJWTSignedKey() string {
 	return c.GetString("jwt.signed_key")
+}
+
+// GetMigrationAuto -.
+func (c *Config) GetMigrationAuto() bool {
+	return c.GetBool("migration.auto")
+}
+
+// GetMigrationRequired -.
+func (c *Config) GetMigrationRequired() bool {
+	return c.GetBool("migration.required")
 }

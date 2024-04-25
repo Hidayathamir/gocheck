@@ -33,21 +33,22 @@ type WrapOpt struct {
 // WrapOption -.
 type WrapOption func(*WrapOpt)
 
+const defaultSkip = 2
+
 // Wrap -.
 func Wrap(err error, options ...WrapOption) error {
-	opt := &WrapOpt{}
-	for _, o := range options {
-		o(opt)
+	option := &WrapOpt{
+		Skip: defaultSkip,
 	}
-	if opt.Skip == 0 {
-		opt.Skip = 2
+	for _, opt := range options {
+		opt(option)
 	}
-	return fmt.Errorf(funcName(opt.Skip)+": %w", err)
+	return fmt.Errorf(funcName(option.Skip)+": %w", err)
 }
 
 // WithSkip -.
 func WithSkip(skip int) WrapOption {
 	return func(wo *WrapOpt) {
-		wo.Skip = skip + 2 //nolint:gomnd
+		wo.Skip = skip + defaultSkip
 	}
 }

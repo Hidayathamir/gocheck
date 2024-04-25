@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "github.com/Hidayathamir/gocheck/pkg/gocheckgrpc";
+
+package gocheckgrpc;
+
+service DigitalWallet {
+    rpc Transfer(ReqDigitalWalletTransfer) returns (ResDigitalWalletTransfer) {}
+}
+
+message ReqDigitalWalletTransfer {
+    uint64 sender_id = 1;
+    uint64 recipient_id = 2;
+    int64  amount = 3;
+}
+
+message ResDigitalWalletTransfer {
+    uint64 id = 1;
+}

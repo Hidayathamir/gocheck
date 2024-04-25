@@ -3,13 +3,10 @@ package main
 
 import "github.com/Hidayathamir/gocheck/internal/app"
 
-// TODO: ADD EXAMPLE GRPC.
-// TODO: HTTP.
-// TODO: INTEGRATION TEST.
+// TODO: INTEGRATION TEST GRPC.
+// TODO: INTEGRATION TEST HTTP.
 // TODO: UNIT TEST.
-// TODO: GORM TX MANAGER.
-// TODO: GRPC CLIENT.
-// TODO: HTTP CLIENT.
+// TODO: MIDDLEWARE AUTH.
 func main() {
 	app.Run()
 }

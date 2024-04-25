@@ -2,18 +2,23 @@ package cache
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/table"
+	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/sirupsen/logrus"
 )
 
 // IDigitalWallet -.
 type IDigitalWallet interface {
 	GetUserByID(ctx context.Context, id uint) (table.User, error)
 	SetUserByID(ctx context.Context, user table.User, expire time.Duration) error
+	DelUserByID(ctx context.Context, id uint) error
 }
 
 // DigitalWallet implements IDigitalWallet.
@@ -34,9 +39,9 @@ func NewDigitalWallet(cfg config.Config, redis *Redis) *DigitalWallet {
 
 ///////////////////////////////// redis cache key /////////////////////////////////
 
-const digitalWalletRedisKeyPrefix = "digital_wallet" //nolint:unused
+const digitalWalletRedisKeyPrefix = "digital_wallet"
 
-func (d *DigitalWallet) keyUserByID(id uint) string { //nolint:unused
+func (d *DigitalWallet) keyUserByID(id uint) string {
 	keyList := []string{d.cfg.GetAppName(), digitalWalletRedisKeyPrefix, "UserByID", strconv.FormatUint(uint64(id), 10)}
 	return strings.Join(keyList, ":")
 }
@@ -44,11 +49,49 @@ func (d *DigitalWallet) keyUserByID(id uint) string { //nolint:unused
 ///////////////////////////////// redis cache key /////////////////////////////////
 
 // GetUserByID implements IDigitalWallet.
-func (d *DigitalWallet) GetUserByID(context.Context, uint) (table.User, error) {
-	panic("unimplemented")
+func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (table.User, error) {
+	val, err := d.redis.client.Get(ctx, d.keyUserByID(id)).Result()
+	if err != nil {
+		return table.User{}, trace.Wrap(err)
+	}
+
+	user := table.User{}
+	err = json.Unmarshal([]byte(val), &user)
+	if err != nil {
+		err := fmt.Errorf("able to get value from redis but error when json unmarshal, will try to delete redis cache key: %w", err)
+
+		errDel := d.DelUserByID(ctx, id)
+		if errDel != nil {
+			logrus.Warn(trace.Wrap(errDel))
+		}
+
+		return table.User{}, trace.Wrap(err)
+	}
+
+	return user, nil
 }
 
 // SetUserByID implements IDigitalWallet.
-func (d *DigitalWallet) SetUserByID(context.Context, table.User, time.Duration) error {
-	panic("unimplemented")
+func (d *DigitalWallet) SetUserByID(ctx context.Context, user table.User, expire time.Duration) error {
+	jsonByte, err := json.Marshal(user)
+	if err != nil {
+		return trace.Wrap(err)
+	}
+
+	err = d.redis.client.Set(ctx, d.keyUserByID(user.ID), string(jsonByte), expire).Err()
+	if err != nil {
+		return trace.Wrap(err)
+	}
+
+	return nil
+}
+
+// DelUserByID implements IDigitalWallet.
+func (d *DigitalWallet) DelUserByID(ctx context.Context, id uint) error {
+	err := d.redis.client.Del(ctx, d.keyUserByID(id)).Err()
+	if err != nil {
+		err := fmt.Errorf("error delete redis cache key '%s': %w", d.keyUserByID(id), err)
+		return trace.Wrap(err)
+	}
+	return nil
 }
