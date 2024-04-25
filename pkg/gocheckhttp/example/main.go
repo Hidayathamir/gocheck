@@ -10,6 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+//nolint:gomnd
 func main() {
 	base := "http://localhost:10010"
 
@@ -19,8 +20,8 @@ func main() {
 	auth := gocheck.Authorization{UserID: 1}
 
 	req := gocheckhttp.ReqDigitalWalletTransfer{
-		RecipientID: 2,      //nolint:gomnd
-		Amount:      500000, //nolint:gomnd
+		RecipientID: 2,
+		Amount:      10000,
 	}
 
 	res, err := client.Transfer(ctx, auth, req)

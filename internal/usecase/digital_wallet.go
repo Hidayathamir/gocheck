@@ -103,7 +103,7 @@ func (d *DigitalWallet) validateReqTransfer(_ context.Context, req dto.ReqTransf
 		return trace.Wrap(err)
 	}
 
-	if req.Amount <= gocheck.MinimumTransferAmount {
+	if req.Amount < gocheck.MinimumTransferAmount {
 		err := fmt.Errorf("amount can not be less than %d", gocheck.MinimumTransferAmount)
 		return trace.Wrap(err)
 	}

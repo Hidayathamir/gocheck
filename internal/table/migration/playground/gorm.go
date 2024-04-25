@@ -6,18 +6,23 @@ import (
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
-// printDDL print DDL of table.
-func printDDL(table any) {
-	cfg, err := config.Load("../../../config.yml")
+// gormPlayground print DDL of table.
+func gormPlayground(fn func(pg *gorm.DB)) {
+	cfg, err := config.Load("../../../../config.yml")
 	fatalIfErr(err)
 
-	pg, err := db.NewPostgres(*cfg, db.WithGormConfig(&gorm.Config{DryRun: true}))
+	gormConfig := &gorm.Config{
+		DryRun: true,
+		Logger: logger.Default.LogMode(logger.Info),
+	}
+
+	pg, err := db.NewPostgres(*cfg, db.WithGormConfig(gormConfig))
 	fatalIfErr(err)
 
-	err = pg.DB.AutoMigrate(table)
-	fatalIfErr(err)
+	fn(pg.DB)
 }
 
 func fatalIfErr(err error) {

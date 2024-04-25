@@ -14,6 +14,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+//nolint:gomnd
 func main() {
 	conn, err := grpc.Dial(net.JoinHostPort("localhost", "11010"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	fatalIfErr(err)
@@ -30,8 +31,8 @@ func main() {
 	fatalIfErr(err)
 
 	req := &gocheckgrpc.ReqDigitalWalletTransfer{
-		RecipientId: 2,      //nolint:gomnd
-		Amount:      500000, //nolint:gomnd
+		RecipientId: 2,
+		Amount:      10000,
 	}
 
 	res, err := client.Transfer(ctx, req)
