@@ -42,6 +42,7 @@ func NewDigitalWallet(cfg config.Config, txManager txmanager.ITransactionManager
 func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqTransfer) (dto.ResTransfer, error) {
 	err := d.validateReqTransfer(ctx, req)
 	if err != nil {
+		err := fmt.Errorf("%w: %w", gocheckerror.ErrInvalidRequest, err)
 		return dto.ResTransfer{}, trace.Wrap(err)
 	}
 

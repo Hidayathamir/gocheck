@@ -3,5 +3,10 @@ package gocheckerror
 
 import "errors"
 
-// ErrUnauthenticated -.
-var ErrUnauthenticated = errors.New("unauthenticated")
+var (
+	// ErrUnauthenticated -.
+	ErrUnauthenticated = errors.New("unauthenticated")
+
+	// ErrInvalidRequest -.
+	ErrInvalidRequest = errors.New("invalid request")
+)
