@@ -89,12 +89,12 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqTransfer) (dto.
 
 func (d *DigitalWallet) validateReqTransfer(_ context.Context, req dto.ReqTransfer) error {
 	if req.SenderID == 0 {
-		err := errors.New("sender_id can not be empty")
+		err := errors.New("sender id can not be empty")
 		return trace.Wrap(err)
 	}
 
 	if req.RecipientID == 0 {
-		err := errors.New("recipient_id can not be empty")
+		err := errors.New("recipient id can not be empty")
 		return trace.Wrap(err)
 	}
 
