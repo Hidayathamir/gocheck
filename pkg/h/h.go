@@ -9,5 +9,7 @@ const (
 	Authorization = "Authorization"
 )
 
-// APPJSON -.
-const APPJSON = "application/json"
+const (
+	// APPJSON -.
+	APPJSON = "application/json"
+)
