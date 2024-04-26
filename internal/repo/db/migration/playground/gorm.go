@@ -1,6 +1,8 @@
 package main
 
 import (
+	"path/filepath"
+
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
@@ -11,7 +13,7 @@ import (
 
 // gormPlayground print DDL of table.
 func gormPlayground(fn func(pg *gorm.DB)) {
-	cfg, err := config.Load("../../../../config.yml")
+	cfg, err := config.Load(filepath.Join("..", "..", "..", "..", "config.yml"))
 	fatalIfErr(err)
 
 	gormConfig := &gorm.Config{
