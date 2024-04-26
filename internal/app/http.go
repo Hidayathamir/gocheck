@@ -11,7 +11,7 @@ import (
 )
 
 func registerHTTPRouter(cfg config.Config, ginEngine *gin.Engine, pg *db.Postgres, redis *cache.Redis) {
-	transportDigitalWallet := injectionDigitalWalletHTTP(cfg, pg, redis)
+	tDigitalWallet := injectionDigitalWalletHTTP(cfg, pg, redis)
 
 	apiGroup := ginEngine.Group("api")
 	{
@@ -19,7 +19,7 @@ func registerHTTPRouter(cfg config.Config, ginEngine *gin.Engine, pg *db.Postgre
 		{
 			digitalWalletGroup := v1Group.Group("digital-wallet")
 			{
-				digitalWalletGroup.POST("transfer", transportDigitalWallet.Transfer)
+				digitalWalletGroup.POST("transfer", tDigitalWallet.Transfer)
 			}
 		}
 	}
