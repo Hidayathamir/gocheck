@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
+	"github.com/Hidayathamir/gocheck/internal/entity"
 	"github.com/Hidayathamir/gocheck/internal/repo/cache"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
-	"github.com/Hidayathamir/gocheck/internal/table"
 	"github.com/Hidayathamir/gocheck/pkg/gocheck"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
@@ -14,8 +14,8 @@ import (
 
 // IDigitalWallet -.
 type IDigitalWallet interface {
-	GetUserByID(ctx context.Context, id uint) (table.User, error)
-	CreateTransaction(ctx context.Context, transaction table.Transaction) (uint, error)
+	GetUserByID(ctx context.Context, id uint) (entity.User, error)
+	CreateTransaction(ctx context.Context, transaction entity.Transaction) (uint, error)
 	UpdateUserBalance(ctx context.Context, userID uint, balance int) error
 }
 
@@ -38,7 +38,7 @@ func NewDigitalWallet(cfg config.Config, pg *db.Postgres, cacheDigitalWallet cac
 }
 
 // GetUserByID implements IDigitalWallet.
-func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (table.User, error) {
+func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (entity.User, error) {
 	user, err := d.cacheDigitalWallet.GetUserByID(ctx, id)
 	if err == nil {
 		return user, nil
@@ -50,10 +50,10 @@ func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (table.User, e
 		db = tx
 	}
 
-	user = table.User{}
+	user = entity.User{}
 	err = db.Last(&user, id).Error
 	if err != nil {
-		return table.User{}, trace.Wrap(err)
+		return entity.User{}, trace.Wrap(err)
 	}
 
 	err = d.cacheDigitalWallet.SetUserByID(ctx, user, gocheck.DefaultCacheExpire)
@@ -65,7 +65,7 @@ func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (table.User, e
 }
 
 // CreateTransaction implements IDigitalWallet.
-func (d *DigitalWallet) CreateTransaction(ctx context.Context, transaction table.Transaction) (uint, error) {
+func (d *DigitalWallet) CreateTransaction(ctx context.Context, transaction entity.Transaction) (uint, error) {
 	db := d.pg.DB
 
 	if tx, ok := d.pg.TxManager.GetTx(ctx); ok {

@@ -29,4 +29,4 @@ undeploy:
 ###################################
 
 migrate-up:
-	go run internal/table/migration/migrate_up.go
+	go run internal/repo/db/migration/migrate_up.go

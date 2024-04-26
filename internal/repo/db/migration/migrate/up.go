@@ -50,7 +50,7 @@ func Up(db *gorm.DB) error {
 
 func getFileMigrationSource() *migrate.FileMigrationSource {
 	migrations := &migrate.FileMigrationSource{
-		Dir: filepath.Join("internal", "table", "migration", "schema_migration"),
+		Dir: filepath.Join("internal", "repo", "db", "migration", "schema_migration"),
 	}
 	return migrations
 }

@@ -4,7 +4,7 @@ package main
 import (
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
-	"github.com/Hidayathamir/gocheck/internal/table/migration/migrate"
+	"github.com/Hidayathamir/gocheck/internal/repo/db/migration/migrate"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )

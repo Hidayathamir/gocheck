@@ -9,15 +9,15 @@ import (
 	"time"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
-	"github.com/Hidayathamir/gocheck/internal/table"
+	"github.com/Hidayathamir/gocheck/internal/entity"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )
 
 // IDigitalWallet -.
 type IDigitalWallet interface {
-	GetUserByID(ctx context.Context, id uint) (table.User, error)
-	SetUserByID(ctx context.Context, user table.User, expire time.Duration) error
+	GetUserByID(ctx context.Context, id uint) (entity.User, error)
+	SetUserByID(ctx context.Context, user entity.User, expire time.Duration) error
 	DelUserByID(ctx context.Context, id uint) error
 }
 
@@ -49,13 +49,13 @@ func (d *DigitalWallet) keyUserByID(id uint) string {
 ///////////////////////////////// redis cache key /////////////////////////////////
 
 // GetUserByID implements IDigitalWallet.
-func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (table.User, error) {
+func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (entity.User, error) {
 	val, err := d.redis.client.Get(ctx, d.keyUserByID(id)).Result()
 	if err != nil {
-		return table.User{}, trace.Wrap(err)
+		return entity.User{}, trace.Wrap(err)
 	}
 
-	user := table.User{}
+	user := entity.User{}
 	err = json.Unmarshal([]byte(val), &user)
 	if err != nil {
 		err := fmt.Errorf("able to get value from redis but error when json unmarshal, will try to delete redis cache key: %w", err)
@@ -65,14 +65,14 @@ func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (table.User, e
 			logrus.Warn(trace.Wrap(errDel))
 		}
 
-		return table.User{}, trace.Wrap(err)
+		return entity.User{}, trace.Wrap(err)
 	}
 
 	return user, nil
 }
 
 // SetUserByID implements IDigitalWallet.
-func (d *DigitalWallet) SetUserByID(ctx context.Context, user table.User, expire time.Duration) error {
+func (d *DigitalWallet) SetUserByID(ctx context.Context, user entity.User, expire time.Duration) error {
 	jsonByte, err := json.Marshal(user)
 	if err != nil {
 		return trace.Wrap(err)

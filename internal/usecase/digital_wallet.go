@@ -7,8 +7,8 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/dto"
+	"github.com/Hidayathamir/gocheck/internal/entity"
 	"github.com/Hidayathamir/gocheck/internal/repo"
-	"github.com/Hidayathamir/gocheck/internal/table"
 	"github.com/Hidayathamir/gocheck/pkg/gocheck"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckerror"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
@@ -62,7 +62,7 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqTransfer) (dto.
 			return trace.Wrap(err)
 		}
 
-		transactionID, err = d.repoDigitalWallet.CreateTransaction(ctx, table.Transaction{
+		transactionID, err = d.repoDigitalWallet.CreateTransaction(ctx, entity.Transaction{
 			SenderID:    sender.ID,
 			RecipientID: recipient.ID,
 			Amount:      req.Amount,
@@ -111,7 +111,7 @@ func (d *DigitalWallet) validateReqTransfer(_ context.Context, req dto.ReqTransf
 	return nil
 }
 
-func (d *DigitalWallet) updateSenderAndRecipientBalance(ctx context.Context, sender, recipient table.User, amount int) error {
+func (d *DigitalWallet) updateSenderAndRecipientBalance(ctx context.Context, sender, recipient entity.User, amount int) error {
 	err := d.txManager.SQLTransaction(ctx, func(ctx context.Context) error {
 		err := d.repoDigitalWallet.UpdateUserBalance(ctx, sender.ID, sender.Balance-amount)
 		if err != nil {

@@ -13,7 +13,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/repo/cache"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
-	"github.com/Hidayathamir/gocheck/internal/table/migration/migrate"
+	"github.com/Hidayathamir/gocheck/internal/repo/db/migration/migrate"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
