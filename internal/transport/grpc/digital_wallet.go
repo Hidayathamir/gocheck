@@ -36,7 +36,7 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req *gocheckgrpc.ReqDigita
 		return nil, trace.Wrap(err)
 	}
 
-	reqTransfer := dto.ReqTransfer{
+	reqTransfer := dto.ReqDigitalWalletTransfer{
 		SenderID:    auth.UserID,
 		RecipientID: uint(req.GetRecipientId()),
 		Amount:      int(req.GetAmount()),

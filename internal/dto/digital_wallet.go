@@ -1,13 +1,13 @@
 package dto
 
-// ReqTransfer represents the request data structure for transfer.
-type ReqTransfer struct {
+// ReqDigitalWalletTransfer represents the request data structure for transfer.
+type ReqDigitalWalletTransfer struct {
 	SenderID    uint
 	RecipientID uint
 	Amount      int
 }
 
-// ResTransfer represents the response data structure for transfer.
-type ResTransfer struct {
+// ResDigitalWalletTransfer represents the response data structure for transfer.
+type ResDigitalWalletTransfer struct {
 	ID uint
 }

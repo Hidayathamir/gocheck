@@ -45,7 +45,7 @@ func (d *DigitalWallet) Transfer(c *gin.Context) {
 		return
 	}
 
-	reqTransfer := dto.ReqTransfer{
+	reqTransfer := dto.ReqDigitalWalletTransfer{
 		SenderID:    auth.UserID,
 		RecipientID: req.RecipientID,
 		Amount:      req.Amount,

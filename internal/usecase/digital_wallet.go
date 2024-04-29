@@ -17,7 +17,7 @@ import (
 
 // IDigitalWallet defines the interface for the DigitalWallet usecase.
 type IDigitalWallet interface {
-	Transfer(ctx context.Context, req dto.ReqTransfer) (dto.ResTransfer, error)
+	Transfer(ctx context.Context, req dto.ReqDigitalWalletTransfer) (dto.ResDigitalWalletTransfer, error)
 }
 
 // DigitalWallet represents the implementation of the DigitalWallet usecase.
@@ -39,11 +39,11 @@ func NewDigitalWallet(cfg *config.Config, txManager txmanager.ITransactionManage
 }
 
 // Transfer implements IDigitalWallet.
-func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqTransfer) (dto.ResTransfer, error) {
+func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqDigitalWalletTransfer) (dto.ResDigitalWalletTransfer, error) {
 	err := d.validateReqTransfer(ctx, req)
 	if err != nil {
 		err := fmt.Errorf("%w: %w", gocheckerror.ErrInvalidRequest, err)
-		return dto.ResTransfer{}, trace.Wrap(err)
+		return dto.ResDigitalWalletTransfer{}, trace.Wrap(err)
 	}
 
 	var transactionID uint
@@ -80,15 +80,15 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqTransfer) (dto.
 		return nil
 	})
 	if err != nil {
-		return dto.ResTransfer{}, trace.Wrap(err)
+		return dto.ResDigitalWalletTransfer{}, trace.Wrap(err)
 	}
 
-	res := dto.ResTransfer{ID: transactionID}
+	res := dto.ResDigitalWalletTransfer{ID: transactionID}
 
 	return res, nil
 }
 
-func (d *DigitalWallet) validateReqTransfer(_ context.Context, req dto.ReqTransfer) error {
+func (d *DigitalWallet) validateReqTransfer(_ context.Context, req dto.ReqDigitalWalletTransfer) error {
 	if req.SenderID == 0 {
 		err := errors.New("sender id can not be empty")
 		return trace.Wrap(err)
