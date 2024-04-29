@@ -58,7 +58,7 @@ func createPGContainer(t *testing.T, cfg *config.Config) *postgrescontainers.Pos
 
 	pgContainer, err := postgrescontainers.RunContainer(context.Background(),
 		testcontainers.WithLogger(&mute{}),
-		testcontainers.WithImage("postgres:16"),
+		testcontainers.WithImage("postgres:16.2"),
 		postgrescontainers.WithDatabase(cfg.GetPostgresDBName()),
 		postgrescontainers.WithUsername(cfg.GetPostgresUsername()),
 		postgrescontainers.WithPassword(cfg.GetPostgresPassword()),
