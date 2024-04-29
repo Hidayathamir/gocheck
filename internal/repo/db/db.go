@@ -28,7 +28,7 @@ type NewPostgresOpt struct {
 type NewPostgresOption func(*NewPostgresOpt)
 
 // NewPostgres -.
-func NewPostgres(cfg config.Config, options ...NewPostgresOption) (*Postgres, error) {
+func NewPostgres(cfg *config.Config, options ...NewPostgresOption) (*Postgres, error) {
 	option := &NewPostgresOpt{
 		gormConfig: &gorm.Config{},
 	}

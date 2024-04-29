@@ -19,7 +19,7 @@ type Redis struct {
 }
 
 // NewRedis -.
-func NewRedis(cfg config.Config) (*Redis, error) {
+func NewRedis(cfg *config.Config) (*Redis, error) {
 	addr := net.JoinHostPort(cfg.GetRedisHost(), cfg.GetRedisPort())
 
 	var redisClient *redis.Client

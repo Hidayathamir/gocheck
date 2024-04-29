@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func registerHTTPRouter(cfg config.Config, ginEngine *gin.Engine, pg *db.Postgres, redis *cache.Redis) {
+func registerHTTPRouter(cfg *config.Config, ginEngine *gin.Engine, pg *db.Postgres, redis *cache.Redis) {
 	tDigitalWallet := injectionDigitalWalletHTTP(cfg, pg, redis)
 
 	apiGroup := ginEngine.Group("api")
@@ -25,7 +25,7 @@ func registerHTTPRouter(cfg config.Config, ginEngine *gin.Engine, pg *db.Postgre
 	}
 }
 
-func injectionDigitalWalletHTTP(cfg config.Config, pg *db.Postgres, redis *cache.Redis) *transporthttp.DigitalWallet {
+func injectionDigitalWalletHTTP(cfg *config.Config, pg *db.Postgres, redis *cache.Redis) *transporthttp.DigitalWallet {
 	cacheDigitalWallet := cache.NewDigitalWallet(cfg, redis)
 	repoDigitalWallet := repo.NewDigitalWallet(cfg, pg, cacheDigitalWallet)
 

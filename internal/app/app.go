@@ -25,7 +25,7 @@ func Run() { //nolint:funlen
 	cfg, err := config.Load("./config.yml")
 	fatalIfErr(err)
 
-	pg, err := db.NewPostgres(*cfg)
+	pg, err := db.NewPostgres(cfg)
 	fatalIfErr(err)
 
 	if cfg.GetMigrationAuto() {
@@ -37,7 +37,7 @@ func Run() { //nolint:funlen
 		}
 	}
 
-	redis, err := cache.NewRedis(*cfg)
+	redis, err := cache.NewRedis(cfg)
 	fatalIfErr(err)
 
 	logrus.Info("initializing grpc server in a goroutine so that it won't block the graceful shutdown handling below")
@@ -45,7 +45,7 @@ func Run() { //nolint:funlen
 	go func() {
 		grpcServer = grpc.NewServer()
 
-		registerGRPCServer(*cfg, grpcServer, pg, redis)
+		registerGRPCServer(cfg, grpcServer, pg, redis)
 
 		addr := net.JoinHostPort(cfg.GetGRPCHost(), cfg.GetGRPCPort())
 		lis, err := net.Listen("tcp", addr)
@@ -61,7 +61,7 @@ func Run() { //nolint:funlen
 	go func() {
 		ginEngine := gin.New()
 
-		registerHTTPRouter(*cfg, ginEngine, pg, redis)
+		registerHTTPRouter(cfg, ginEngine, pg, redis)
 
 		addr := net.JoinHostPort(cfg.GetHTTPHost(), cfg.GetHTTPPort())
 		httpServer = &http.Server{ //nolint:gosec

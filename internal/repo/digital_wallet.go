@@ -21,7 +21,7 @@ type IDigitalWallet interface {
 
 // DigitalWallet implements IDigitalWallet.
 type DigitalWallet struct {
-	cfg                config.Config
+	cfg                *config.Config
 	pg                 *db.Postgres
 	cacheDigitalWallet cache.IDigitalWallet
 }
@@ -29,7 +29,7 @@ type DigitalWallet struct {
 var _ IDigitalWallet = &DigitalWallet{}
 
 // NewDigitalWallet -.
-func NewDigitalWallet(cfg config.Config, pg *db.Postgres, cacheDigitalWallet cache.IDigitalWallet) *DigitalWallet {
+func NewDigitalWallet(cfg *config.Config, pg *db.Postgres, cacheDigitalWallet cache.IDigitalWallet) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:                cfg,
 		pg:                 pg,

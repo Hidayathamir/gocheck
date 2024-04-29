@@ -21,7 +21,7 @@ func gormPlayground(fn func(pg *gorm.DB)) {
 		Logger: logger.Default.LogMode(logger.Info),
 	}
 
-	pg, err := db.NewPostgres(*cfg, db.WithGormConfig(gormConfig))
+	pg, err := db.NewPostgres(cfg, db.WithGormConfig(gormConfig))
 	fatalIfErr(err)
 
 	fn(pg.DB)

@@ -14,12 +14,12 @@ import (
 
 // DigitalWallet -.
 type DigitalWallet struct {
-	cfg                  config.Config
+	cfg                  *config.Config
 	usecaseDigitalWallet usecase.IDigitalWallet
 }
 
 // NewDigitalWallet -.
-func NewDigitalWallet(cfg config.Config, usecaseDigitalWallet usecase.IDigitalWallet) *DigitalWallet {
+func NewDigitalWallet(cfg *config.Config, usecaseDigitalWallet usecase.IDigitalWallet) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:                  cfg,
 		usecaseDigitalWallet: usecaseDigitalWallet,

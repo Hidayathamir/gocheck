@@ -23,14 +23,14 @@ type IDigitalWallet interface {
 
 // DigitalWallet implements IDigitalWallet.
 type DigitalWallet struct {
-	cfg   config.Config
+	cfg   *config.Config
 	redis *Redis
 }
 
 var _ IDigitalWallet = &DigitalWallet{}
 
 // NewDigitalWallet -.
-func NewDigitalWallet(cfg config.Config, redis *Redis) *DigitalWallet {
+func NewDigitalWallet(cfg *config.Config, redis *Redis) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:   cfg,
 		redis: redis,

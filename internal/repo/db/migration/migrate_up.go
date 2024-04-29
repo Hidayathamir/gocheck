@@ -13,7 +13,7 @@ func main() {
 	cfg, err := config.Load("./config.yml")
 	fatalIfErr(err)
 
-	pg, err := db.NewPostgres(*cfg)
+	pg, err := db.NewPostgres(cfg)
 	fatalIfErr(err)
 
 	err = migrate.Up(pg.DB)

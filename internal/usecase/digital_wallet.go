@@ -22,7 +22,7 @@ type IDigitalWallet interface {
 
 // DigitalWallet implements IDigitalWallet.
 type DigitalWallet struct {
-	cfg               config.Config
+	cfg               *config.Config
 	txManager         txmanager.ITransactionManager
 	repoDigitalWallet repo.IDigitalWallet
 }
@@ -30,7 +30,7 @@ type DigitalWallet struct {
 var _ IDigitalWallet = &DigitalWallet{}
 
 // NewDigitalWallet -.
-func NewDigitalWallet(cfg config.Config, txManager txmanager.ITransactionManager, repoDigitalWallet repo.IDigitalWallet) *DigitalWallet {
+func NewDigitalWallet(cfg *config.Config, txManager txmanager.ITransactionManager, repoDigitalWallet repo.IDigitalWallet) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:               cfg,
 		txManager:         txManager,
