@@ -12,8 +12,23 @@ import (
 	"gorm.io/gorm"
 )
 
+// UpOpt -.
+type UpOpt struct {
+	Dir string
+}
+
+// UpOption -.
+type UpOption func(*UpOpt)
+
+var defaultDir = filepath.Join("internal", "repo", "db", "migration", "schema_migration")
+
 // Up -.
-func Up(db *gorm.DB) error {
+func Up(db *gorm.DB, options ...UpOption) error {
+	option := &UpOpt{Dir: defaultDir}
+	for _, opt := range options {
+		opt(option)
+	}
+
 	migrate.SetTable("migrations")
 
 	var countMigrationApplied int
@@ -25,7 +40,8 @@ func Up(db *gorm.DB) error {
 			return trace.Wrap(err)
 		}
 
-		countMigrationApplied, errMigrateUp = migrate.Exec(sql, "postgres", getFileMigrationSource(), migrate.Up)
+		fileMigrationSource := &migrate.FileMigrationSource{Dir: option.Dir}
+		countMigrationApplied, errMigrateUp = migrate.Exec(sql, "postgres", fileMigrationSource, migrate.Up)
 		if errMigrateUp == nil {
 			break
 		}
@@ -48,9 +64,9 @@ func Up(db *gorm.DB) error {
 	return nil
 }
 
-func getFileMigrationSource() *migrate.FileMigrationSource {
-	migrations := &migrate.FileMigrationSource{
-		Dir: filepath.Join("internal", "repo", "db", "migration", "schema_migration"),
+// WithDir -.
+func WithDir(dir string) UpOption {
+	return func(uo *UpOpt) {
+		uo.Dir = dir
 	}
-	return migrations
 }

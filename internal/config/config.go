@@ -114,6 +114,11 @@ func (c *Config) GetPostgresPort() string {
 	return c.GetString("postgres.port")
 }
 
+// SetPostgresPort -.
+func (c *Config) SetPostgresPort(port string) {
+	c.Set("postgres.port", port)
+}
+
 // GetPostgresDBName -.
 func (c *Config) GetPostgresDBName() string {
 	return c.GetString("postgres.db_name")
@@ -127,6 +132,11 @@ func (c *Config) GetRedisHost() string {
 // GetRedisPort -.
 func (c *Config) GetRedisPort() string {
 	return c.GetString("redis.port")
+}
+
+// SetRedisPort -.
+func (c *Config) SetRedisPort(port string) {
+	c.Set("redis.port", port)
 }
 
 // GetMigrationAuto -.
