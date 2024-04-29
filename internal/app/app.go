@@ -14,6 +14,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/repo/cache"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 	"github.com/Hidayathamir/gocheck/internal/repo/db/migration/migrate"
+	"github.com/Hidayathamir/gocheck/internal/usecase"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -40,12 +41,14 @@ func Run() { //nolint:funlen
 	redis, err := cache.NewRedis(cfg)
 	fatalIfErr(err)
 
+	usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+
 	logrus.Info("initializing grpc server in a goroutine so that it won't block the graceful shutdown handling below")
 	var grpcServer *grpc.Server
 	go func() {
 		grpcServer = grpc.NewServer()
 
-		registerGRPCServer(cfg, grpcServer, pg, redis)
+		registerGRPCServer(cfg, grpcServer, usecaseDigitalWallet)
 
 		addr := net.JoinHostPort(cfg.GetGRPCHost(), cfg.GetGRPCPort())
 		lis, err := net.Listen("tcp", addr)
@@ -61,7 +64,7 @@ func Run() { //nolint:funlen
 	go func() {
 		ginEngine := gin.New()
 
-		registerHTTPRouter(cfg, ginEngine, pg, redis)
+		registerHTTPRouter(cfg, ginEngine, usecaseDigitalWallet)
 
 		addr := net.JoinHostPort(cfg.GetHTTPHost(), cfg.GetHTTPPort())
 		httpServer = &http.Server{ //nolint:gosec
