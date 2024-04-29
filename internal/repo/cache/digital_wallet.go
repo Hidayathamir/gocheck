@@ -14,14 +14,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// IDigitalWallet -.
+// IDigitalWallet defines the interface for the DigitalWallet repository.
 type IDigitalWallet interface {
 	GetUserByID(ctx context.Context, id uint) (entity.User, error)
 	SetUserByID(ctx context.Context, user entity.User, expire time.Duration) error
 	DelUserByID(ctx context.Context, id uint) error
 }
 
-// DigitalWallet implements IDigitalWallet.
+// DigitalWallet represents the implementation of the DigitalWallet repository.
 type DigitalWallet struct {
 	cfg   *config.Config
 	redis *Redis
@@ -29,7 +29,7 @@ type DigitalWallet struct {
 
 var _ IDigitalWallet = &DigitalWallet{}
 
-// NewDigitalWallet -.
+// NewDigitalWallet creates a new instance of the ErajolBike repository.
 func NewDigitalWallet(cfg *config.Config, redis *Redis) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:   cfg,

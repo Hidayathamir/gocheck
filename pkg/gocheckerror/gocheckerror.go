@@ -1,12 +1,12 @@
-// Package gocheckerror -.
+// Package gocheckerror provides custom error definitions.
 package gocheckerror
 
 import "errors"
 
 var (
-	// ErrUnauthenticated -.
+	// ErrUnauthenticated represents an unauthenticated error.
 	ErrUnauthenticated = errors.New("unauthenticated")
 
-	// ErrInvalidRequest -.
+	// ErrInvalidRequest represents an invalid request error.
 	ErrInvalidRequest = errors.New("invalid request")
 )

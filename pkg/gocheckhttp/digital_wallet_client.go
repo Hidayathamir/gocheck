@@ -14,13 +14,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// DigitalWalletClient -.
+// DigitalWalletClient represents a client for interacting with the DigitalWallet API.
 type DigitalWalletClient struct {
 	Base        string
 	URLTransfer string
 }
 
-// NewDigitalWalletClient -.
+// NewDigitalWalletClient creates a new instance of DigitalWalletClient.
 func NewDigitalWalletClient(base string) *DigitalWalletClient {
 	return &DigitalWalletClient{
 		Base:        base,
@@ -36,7 +36,7 @@ func (d *DigitalWalletClient) getURLTransfer() string {
 
 ////////////////////////////////////////
 
-// Transfer -.
+// Transfer sends http request to create transfer.
 func (d *DigitalWalletClient) Transfer(ctx context.Context, auth gocheckhttpmiddleware.Authorization, req ReqDigitalWalletTransfer) (ResDataDigitalWalletTransfer, error) {
 	fail := func(err error) (ResDataDigitalWalletTransfer, error) {
 		return ResDataDigitalWalletTransfer{}, trace.Wrap(err, trace.WithSkip(1))

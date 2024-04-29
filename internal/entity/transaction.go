@@ -2,7 +2,7 @@ package entity
 
 import "time"
 
-// Transaction -.
+// Transaction represents entity transaction.
 type Transaction struct {
 	ID uint `gorm:"primarykey" json:"id"`
 

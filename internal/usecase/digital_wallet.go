@@ -15,12 +15,12 @@ import (
 	"github.com/Hidayathamir/txmanager"
 )
 
-// IDigitalWallet -.
+// IDigitalWallet defines the interface for the DigitalWallet usecase.
 type IDigitalWallet interface {
 	Transfer(ctx context.Context, req dto.ReqTransfer) (dto.ResTransfer, error)
 }
 
-// DigitalWallet implements IDigitalWallet.
+// DigitalWallet represents the implementation of the DigitalWallet usecase.
 type DigitalWallet struct {
 	cfg               *config.Config
 	txManager         txmanager.ITransactionManager
@@ -29,7 +29,7 @@ type DigitalWallet struct {
 
 var _ IDigitalWallet = &DigitalWallet{}
 
-// NewDigitalWallet -.
+// NewDigitalWallet creates a new instance of the DigitalWallet usecase.
 func NewDigitalWallet(cfg *config.Config, txManager txmanager.ITransactionManager, repoDigitalWallet repo.IDigitalWallet) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:               cfg,

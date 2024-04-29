@@ -1,4 +1,4 @@
-// Package middleware -.
+// Package middleware provides HTTP middleware functionalities.
 package middleware
 
 import (
@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetAuthFromGinCtxHeader -.
+// GetAuthFromGinCtxHeader extracts authorization information from the Gin context header.
 func GetAuthFromGinCtxHeader(c *gin.Context) (gocheckhttpmiddleware.Authorization, error) {
 	auth := gocheckhttpmiddleware.Authorization{}
 	err := json.Unmarshal([]byte(c.GetHeader(h.Authorization)), &auth)

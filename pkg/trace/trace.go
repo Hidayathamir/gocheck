@@ -1,4 +1,4 @@
-// Package trace -.
+// Package trace provides utilities for error tracing.
 package trace
 
 import (
@@ -25,17 +25,17 @@ func funcName(skip int) string {
 	return funcName
 }
 
-// WrapOpt -.
+// WrapOpt represents options for the Wrap function.
 type WrapOpt struct {
 	Skip int
 }
 
-// WrapOption -.
+// WrapOption represents an option for the Wrap function.
 type WrapOption func(*WrapOpt)
 
 const defaultSkip = 2
 
-// Wrap -.
+// Wrap wraps the given error with the name of the calling function.
 func Wrap(err error, options ...WrapOption) error {
 	option := &WrapOpt{
 		Skip: defaultSkip,
@@ -46,7 +46,7 @@ func Wrap(err error, options ...WrapOption) error {
 	return fmt.Errorf(funcName(option.Skip)+": %w", err)
 }
 
-// WithSkip -.
+// WithSkip sets the number of stack frames to skip when identifying the caller.
 func WithSkip(skip int) WrapOption {
 	return func(wo *WrapOpt) {
 		wo.Skip = skip + defaultSkip

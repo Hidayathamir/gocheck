@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// User -.
+// User represents entity user.
 type User struct {
 	ID uint `gorm:"primarykey" json:"id"`
 
@@ -16,7 +16,7 @@ type User struct {
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"updated_at"`
 }
 
-// UserCredential -.
+// UserCredential represents entity user credential.
 type UserCredential struct {
 	ID uint `gorm:"primarykey" json:"id"`
 

@@ -1,4 +1,4 @@
-// Package db -.
+// Package db provides database connection and management functionalities.
 package db
 
 import (
@@ -13,21 +13,21 @@ import (
 	"gorm.io/gorm"
 )
 
-// Postgres -.
+// Postgres represents a PostgreSQL database connection.
 type Postgres struct {
 	DB        *gorm.DB
 	TxManager txmanager.ITransactionManager
 }
 
-// NewPostgresOpt -.
+// NewPostgresOpt contains options for configuring the PostgreSQL connection.
 type NewPostgresOpt struct {
 	gormConfig *gorm.Config
 }
 
-// NewPostgresOption -.
+// NewPostgresOption defines a function signature for configuring NewPostgresOpt.
 type NewPostgresOption func(*NewPostgresOpt)
 
-// NewPostgres -.
+// NewPostgres initializes a new PostgreSQL database connection.
 func NewPostgres(cfg *config.Config, options ...NewPostgresOption) (*Postgres, error) {
 	option := &NewPostgresOpt{
 		gormConfig: &gorm.Config{},
@@ -76,7 +76,7 @@ func NewPostgres(cfg *config.Config, options ...NewPostgresOption) (*Postgres, e
 	return pg, nil
 }
 
-// WithGormConfig -.
+// WithGormConfig configures the GORM options.
 func WithGormConfig(gormConfig *gorm.Config) NewPostgresOption {
 	return func(npo *NewPostgresOpt) {
 		npo.gormConfig = gormConfig

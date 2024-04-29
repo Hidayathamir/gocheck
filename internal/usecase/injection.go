@@ -7,7 +7,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 )
 
-// InitUsecaseDigitalWallet -.
+// InitUsecaseDigitalWallet initializes the DigitalWallet usecase.
 func InitUsecaseDigitalWallet(cfg *config.Config, pg *db.Postgres, redis *cache.Redis) *DigitalWallet {
 	cacheDigitalWallet := cache.NewDigitalWallet(cfg, redis)
 	repoDigitalWallet := repo.NewDigitalWallet(cfg, pg, cacheDigitalWallet)

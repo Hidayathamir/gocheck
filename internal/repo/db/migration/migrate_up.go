@@ -1,4 +1,4 @@
-// Package main -.
+// Package main is the entry point for migrate database.
 package main
 
 import (

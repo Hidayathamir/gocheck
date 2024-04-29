@@ -1,4 +1,4 @@
-// Package migrate -.
+// Package migrate provides functionality for database migrations.
 package migrate
 
 import (
@@ -12,17 +12,17 @@ import (
 	"gorm.io/gorm"
 )
 
-// UpOpt -.
+// UpOpt contains options for performing database migrations.
 type UpOpt struct {
 	Dir string
 }
 
-// UpOption -.
+// UpOption defines a function signature for configuring UpOpt.
 type UpOption func(*UpOpt)
 
 var defaultDir = filepath.Join("internal", "repo", "db", "migration", "schema_migration")
 
-// Up -.
+// Up performs database migrations.
 func Up(db *gorm.DB, options ...UpOption) error {
 	option := &UpOpt{Dir: defaultDir}
 	for _, opt := range options {
@@ -64,7 +64,7 @@ func Up(db *gorm.DB, options ...UpOption) error {
 	return nil
 }
 
-// WithDir -.
+// WithDir specifies the directory containing migration files.
 func WithDir(dir string) UpOption {
 	return func(uo *UpOpt) {
 		uo.Dir = dir

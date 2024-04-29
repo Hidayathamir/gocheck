@@ -2,5 +2,5 @@ package gocheckerror
 
 import "errors"
 
-// ErrInsufficientFunds -.
+// ErrInsufficientFunds represents an insufficient funds error.
 var ErrInsufficientFunds = errors.New("insufficient funds")

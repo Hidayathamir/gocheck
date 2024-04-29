@@ -1,6 +1,6 @@
 package gocheckhttpmiddleware
 
-// Authorization -.
+// Authorization represents authorization information for HTTP requests.
 type Authorization struct {
 	UserID uint `json:"user_id"`
 }

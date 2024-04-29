@@ -1,4 +1,4 @@
-// Package cache -.
+// Package cache provides cache storage implementations.
 package cache
 
 import (
@@ -13,12 +13,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Redis -.
+// Redis represents a Redis client.
 type Redis struct {
 	client *redis.Client
 }
 
-// NewRedis -.
+// NewRedis creates a new instance of the Redis client.
 func NewRedis(cfg *config.Config) (*Redis, error) {
 	addr := net.JoinHostPort(cfg.GetRedisHost(), cfg.GetRedisPort())
 

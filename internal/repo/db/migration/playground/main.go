@@ -1,4 +1,4 @@
-// Package main -.
+// Package main is the entry point for debug gorm.
 package main
 
 import (

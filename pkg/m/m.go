@@ -2,6 +2,6 @@
 package m
 
 const (
-	// Authorization -.
+	// Authorization is the metadata keyword for authorization in gRPC.
 	Authorization = "authorization"
 )

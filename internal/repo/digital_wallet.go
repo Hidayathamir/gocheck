@@ -12,14 +12,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// IDigitalWallet -.
+// IDigitalWallet defines the interface for the DigitalWallet repository.
 type IDigitalWallet interface {
 	GetUserByID(ctx context.Context, id uint) (entity.User, error)
 	CreateTransaction(ctx context.Context, transaction entity.Transaction) (uint, error)
 	UpdateUserBalance(ctx context.Context, userID uint, balance int) error
 }
 
-// DigitalWallet implements IDigitalWallet.
+// DigitalWallet represents the implementation of the DigitalWallet repository.
 type DigitalWallet struct {
 	cfg                *config.Config
 	pg                 *db.Postgres
@@ -28,7 +28,7 @@ type DigitalWallet struct {
 
 var _ IDigitalWallet = &DigitalWallet{}
 
-// NewDigitalWallet -.
+// NewDigitalWallet creates a new instance of the DigitalWallet repository.
 func NewDigitalWallet(cfg *config.Config, pg *db.Postgres, cacheDigitalWallet cache.IDigitalWallet) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:                cfg,

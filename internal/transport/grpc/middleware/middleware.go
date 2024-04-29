@@ -1,4 +1,4 @@
-// Package middleware -.
+// Package middleware provides gRPC middleware functionalities.
 package middleware
 
 import (
@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// GetAuthFromCtx -.
+// GetAuthFromCtx retrieves authorization information from the context metadata.
 func GetAuthFromCtx(ctx context.Context) (gocheckgrpcmiddleware.Authorization, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {

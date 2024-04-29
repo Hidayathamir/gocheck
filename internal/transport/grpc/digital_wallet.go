@@ -11,7 +11,7 @@ import (
 	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
 )
 
-// DigitalWallet -.
+// DigitalWallet represents the gRPC server for the DigitalWallet service.
 type DigitalWallet struct {
 	gocheckgrpc.UnimplementedDigitalWalletServer
 
@@ -21,7 +21,7 @@ type DigitalWallet struct {
 
 var _ gocheckgrpc.DigitalWalletServer = &DigitalWallet{}
 
-// NewDigitalWallet -.
+// NewDigitalWallet creates a new instance of DigitalWallet gRPC server.
 func NewDigitalWallet(cfg *config.Config, usecaseDigitalWallet usecase.IDigitalWallet) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:                  cfg,

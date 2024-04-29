@@ -12,13 +12,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// DigitalWallet -.
+// DigitalWallet represents the HTTP server for the DigitalWallet service.
 type DigitalWallet struct {
 	cfg                  *config.Config
 	usecaseDigitalWallet usecase.IDigitalWallet
 }
 
-// NewDigitalWallet -.
+// NewDigitalWallet creates a new instance of DigitalWallet HTTP server.
 func NewDigitalWallet(cfg *config.Config, usecaseDigitalWallet usecase.IDigitalWallet) *DigitalWallet {
 	return &DigitalWallet{
 		cfg:                  cfg,
@@ -26,7 +26,7 @@ func NewDigitalWallet(cfg *config.Config, usecaseDigitalWallet usecase.IDigitalW
 	}
 }
 
-// Transfer -.
+// Transfer is the handler function for the Transfer endpoint.
 func (d *DigitalWallet) Transfer(c *gin.Context) {
 	auth, err := middleware.GetAuthFromGinCtxHeader(c)
 	if err != nil {
