@@ -28,3 +28,7 @@ redis:
 migration:
   auto: true
   required: true
+
+gorm:
+  max_idle_conns: 1
+  max_open_conns: 1

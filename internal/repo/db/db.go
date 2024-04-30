@@ -64,6 +64,14 @@ func NewPostgres(cfg *config.Config, options ...NewPostgresOption) (*Postgres, e
 		return nil, trace.Wrap(errInitDB)
 	}
 
+	sqlDB, err := db.DB()
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+
+	sqlDB.SetMaxIdleConns(cfg.GetGormMaxIdleConns())
+	sqlDB.SetMaxOpenConns(cfg.GetGormMaxOpenConns())
+
 	txManager := txmanager.NewTransactionManager(db)
 
 	pg := &Postgres{

@@ -148,3 +148,13 @@ func (c *Config) GetMigrationAuto() bool {
 func (c *Config) GetMigrationRequired() bool {
 	return c.GetBool("migration.required")
 }
+
+// GetGormMaxIdleConns retrieves the gorm maximum idle connection pooling from the configuration.
+func (c *Config) GetGormMaxIdleConns() int {
+	return c.GetInt("gorm.max_idle_conns")
+}
+
+// GetGormMaxOpenConns retrieves the gorm maximum open connection pooling from the configuration.
+func (c *Config) GetGormMaxOpenConns() int {
+	return c.GetInt("gorm.max_open_conns")
+}
