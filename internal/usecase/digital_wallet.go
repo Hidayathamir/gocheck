@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
@@ -13,6 +12,7 @@ import (
 	"github.com/Hidayathamir/gocheck/pkg/gocheckerror"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/Hidayathamir/txmanager"
+	"github.com/go-playground/validator/v10"
 )
 
 // IDigitalWallet defines the interface for the DigitalWallet usecase.
@@ -23,6 +23,7 @@ type IDigitalWallet interface {
 // DigitalWallet represents the implementation of the DigitalWallet usecase.
 type DigitalWallet struct {
 	cfg               *config.Config
+	validator         *validator.Validate
 	txManager         txmanager.ITransactionManager
 	repoDigitalWallet repo.IDigitalWallet
 }
@@ -31,8 +32,10 @@ var _ IDigitalWallet = &DigitalWallet{}
 
 // NewDigitalWallet creates a new instance of the DigitalWallet usecase.
 func NewDigitalWallet(cfg *config.Config, txManager txmanager.ITransactionManager, repoDigitalWallet repo.IDigitalWallet) *DigitalWallet {
+	validator := validator.New(validator.WithRequiredStructEnabled())
 	return &DigitalWallet{
 		cfg:               cfg,
+		validator:         validator,
 		txManager:         txManager,
 		repoDigitalWallet: repoDigitalWallet,
 	}
@@ -89,18 +92,8 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqDigitalWalletTr
 }
 
 func (d *DigitalWallet) validateReqTransfer(_ context.Context, req dto.ReqDigitalWalletTransfer) error {
-	if req.SenderID == 0 {
-		err := errors.New("sender id can not be empty")
-		return trace.Wrap(err)
-	}
-
-	if req.RecipientID == 0 {
-		err := errors.New("recipient id can not be empty")
-		return trace.Wrap(err)
-	}
-
-	if req.SenderID == req.RecipientID {
-		err := errors.New("can not transfer to yourself")
+	err := d.validator.Struct(req)
+	if err != nil {
 		return trace.Wrap(err)
 	}
 
