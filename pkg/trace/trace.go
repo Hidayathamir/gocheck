@@ -7,8 +7,22 @@ import (
 	"strings"
 )
 
-func funcName(skip int) string {
-	pc, _, _, ok := runtime.Caller(skip)
+type optFuncName struct {
+	Skip int
+}
+
+type optionFuncName func(*optFuncName)
+
+// FuncName return caller function name.
+func FuncName(options ...optionFuncName) string {
+	option := &optFuncName{
+		Skip: 1,
+	}
+	for _, opt := range options {
+		opt(option)
+	}
+
+	pc, _, _, ok := runtime.Caller(option.Skip)
 	if !ok {
 		return "?"
 	}
@@ -23,6 +37,12 @@ func funcName(skip int) string {
 	funcName := funcNameWithModuleSplit[len(funcNameWithModuleSplit)-1]
 
 	return funcName
+}
+
+func withSkipFuncName(skip int) optionFuncName {
+	return func(o *optFuncName) {
+		o.Skip = skip
+	}
 }
 
 // WrapOpt represents options for the Wrap function.
@@ -43,7 +63,7 @@ func Wrap(err error, options ...WrapOption) error {
 	for _, opt := range options {
 		opt(option)
 	}
-	return fmt.Errorf(funcName(option.Skip)+": %w", err)
+	return fmt.Errorf(FuncName(withSkipFuncName(option.Skip))+": %w", err)
 }
 
 // WithSkip sets the number of stack frames to skip when identifying the caller.

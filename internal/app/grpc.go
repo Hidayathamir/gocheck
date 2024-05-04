@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func registerGRPCServer(cfg *config.Config, grpcServer *grpc.Server, usecaseDigitalWallet *usecase.DigitalWallet) {
+func registerGRPCServer(cfg *config.Config, grpcServer *grpc.Server, usecaseDigitalWallet usecase.IDigitalWallet) {
 	tDigitalWallet := transportgrpc.NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 	gocheckgrpc.RegisterDigitalWalletServer(grpcServer, tDigitalWallet)

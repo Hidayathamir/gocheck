@@ -15,6 +15,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 	"github.com/Hidayathamir/gocheck/internal/repo/db/migration/migrate"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
+	"github.com/Hidayathamir/gocheck/internal/usecasemw/loggermw"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -23,6 +24,8 @@ import (
 
 // Run runs application.
 func Run() { //nolint:funlen
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+
 	cfg, err := config.Load("./config.yml")
 	fatalIfErr(err)
 
@@ -41,7 +44,9 @@ func Run() { //nolint:funlen
 	redis, err := cache.NewRedis(cfg)
 	fatalIfErr(err)
 
-	usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+	var usecaseDigitalWallet usecase.IDigitalWallet
+	usecaseDigitalWallet = usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+	usecaseDigitalWallet = loggermw.NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 	logrus.Info("initializing grpc server in a goroutine so that it won't block the graceful shutdown handling below")
 	var grpcServer *grpc.Server

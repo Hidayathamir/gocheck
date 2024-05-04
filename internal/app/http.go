@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func registerHTTPRouter(cfg *config.Config, ginEngine *gin.Engine, usecaseDigitalWallet *usecase.DigitalWallet) {
+func registerHTTPRouter(cfg *config.Config, ginEngine *gin.Engine, usecaseDigitalWallet usecase.IDigitalWallet) {
 	tDigitalWallet := transporthttp.NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 	apiGroup := ginEngine.Group("api")
