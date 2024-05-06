@@ -1,4 +1,3 @@
-// Package gocheckerror provides custom error definitions.
 package gocheckerror
 
 import "errors"
@@ -9,4 +8,7 @@ var (
 
 	// ErrInvalidRequest represents an invalid request error.
 	ErrInvalidRequest = errors.New("invalid request")
+
+	// ErrInsufficientFunds represents an insufficient funds error.
+	ErrInsufficientFunds = errors.New("insufficient funds")
 )
