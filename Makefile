@@ -30,3 +30,13 @@ undeploy:
 
 migrate-up:
 	go run internal/repo/db/migration/migrate_up.go
+
+###################################
+
+.SILENT:godoc
+godoc:
+	echo "" && \
+	echo "Please go to link below to see documentation" && \
+	echo http://localhost:7010/pkg/github.com/Hidayathamir/gocheck/?m=all && \
+	echo "" && \
+	godoc -http localhost:7010
