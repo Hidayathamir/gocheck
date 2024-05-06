@@ -5,9 +5,11 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/entity"
+	"github.com/Hidayathamir/gocheck/internal/entity/table"
 	"github.com/Hidayathamir/gocheck/internal/repo/cache"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 	"github.com/Hidayathamir/gocheck/pkg/gocheck"
+	"github.com/Hidayathamir/gocheck/pkg/q"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )
@@ -88,7 +90,11 @@ func (d *DigitalWallet) UpdateUserBalance(ctx context.Context, userID uint, bala
 		db = tx
 	}
 
-	err := db.Table("users").Where("id = ?", userID).Update("balance", balance).Error
+	err := db.
+		Table(table.User.TableName()).
+		Where(q.Equal(table.User.ID), userID).
+		Update(table.User.Balance, balance).
+		Error
 	if err != nil {
 		return trace.Wrap(err)
 	}
