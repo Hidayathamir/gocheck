@@ -13,6 +13,8 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/repo/cache"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 	"github.com/Hidayathamir/gocheck/internal/repo/db/migration/migrate"
+	transportgrpc "github.com/Hidayathamir/gocheck/internal/transport/grpc"
+	transporthttp "github.com/Hidayathamir/gocheck/internal/transport/http"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
 	"github.com/Hidayathamir/gocheck/internal/usecasemw/loggermw"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
@@ -47,12 +49,19 @@ func Run() { //nolint:funlen
 	usecaseDigitalWallet = usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
 	usecaseDigitalWallet = loggermw.NewDigitalWallet(cfg, usecaseDigitalWallet)
 
+	transportgrpcDigitalWallet := transportgrpc.NewDigitalWallet(cfg, usecaseDigitalWallet)
+
+	transporthttpDigitalWallet := transporthttp.NewDigitalWallet(cfg, usecaseDigitalWallet)
+
 	logrus.Info("initializing grpc server in a goroutine so that it won't block the graceful shutdown handling below")
 	var grpcServer *grpc.Server
 	go func() {
 		grpcServer = grpc.NewServer()
 
-		registerGRPCServer(cfg, grpcServer, usecaseDigitalWallet)
+		registerGRPCServer(
+			grpcServer,
+			transportgrpcDigitalWallet,
+		)
 
 		addr := net.JoinHostPort(cfg.GetGRPCHost(), cfg.GetGRPCPort())
 		lis, err := net.Listen("tcp", addr)
@@ -68,7 +77,10 @@ func Run() { //nolint:funlen
 	go func() {
 		ginEngine := gin.New()
 
-		registerHTTPRouter(cfg, ginEngine, usecaseDigitalWallet)
+		registerHTTPRouter(
+			ginEngine,
+			transporthttpDigitalWallet,
+		)
 
 		addr := net.JoinHostPort(cfg.GetHTTPHost(), cfg.GetHTTPPort())
 		httpServer = &http.Server{ //nolint:gosec
