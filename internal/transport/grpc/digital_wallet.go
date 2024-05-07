@@ -5,7 +5,6 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/dto"
-	"github.com/Hidayathamir/gocheck/internal/transport/grpc/middleware"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
@@ -31,15 +30,10 @@ func NewDigitalWallet(cfg *config.Config, usecaseDigitalWallet usecase.IDigitalW
 
 // Transfer implements gocheckgrpc.DigitalWalletServer.
 func (d *DigitalWallet) Transfer(ctx context.Context, req *gocheckgrpc.ReqDigitalWalletTransfer) (*gocheckgrpc.ResDigitalWalletTransfer, error) {
-	auth, err := middleware.GetAuthFromCtx(ctx)
+	reqTransfer := dto.ReqDigitalWalletTransfer{}
+	err := reqTransfer.LoadFromReqGRPC(ctx, req)
 	if err != nil {
 		return nil, trace.Wrap(err)
-	}
-
-	reqTransfer := dto.ReqDigitalWalletTransfer{
-		SenderID:    auth.UserID,
-		RecipientID: uint(req.GetRecipientId()),
-		Amount:      int(req.GetAmount()),
 	}
 
 	resTransfer, err := d.usecaseDigitalWallet.Transfer(ctx, reqTransfer)
@@ -47,9 +41,7 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req *gocheckgrpc.ReqDigita
 		return nil, trace.Wrap(err)
 	}
 
-	res := &gocheckgrpc.ResDigitalWalletTransfer{
-		Id: uint64(resTransfer.ID),
-	}
+	res := resTransfer.ToResGRPC()
 
 	return res, nil
 }

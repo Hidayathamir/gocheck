@@ -5,7 +5,6 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/dto"
-	"github.com/Hidayathamir/gocheck/internal/transport/http/middleware"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
@@ -28,27 +27,13 @@ func NewDigitalWallet(cfg *config.Config, usecaseDigitalWallet usecase.IDigitalW
 
 // Transfer is the handler function for the Transfer endpoint.
 func (d *DigitalWallet) Transfer(c *gin.Context) {
-	auth, err := middleware.GetAuthFromGinCtxHeader(c)
-	if err != nil {
-		err := trace.Wrap(err)
-		res := gocheckhttp.ResDigitalWalletTransfer{Error: err.Error()}
-		c.JSON(http.StatusUnauthorized, res)
-		return
-	}
-
-	req := gocheckhttp.ReqDigitalWalletTransfer{}
-	err = c.ShouldBindJSON(&req)
+	reqTransfer := dto.ReqDigitalWalletTransfer{}
+	err := reqTransfer.LoadFromReqHTTP(c)
 	if err != nil {
 		err := trace.Wrap(err)
 		res := gocheckhttp.ResDigitalWalletTransfer{Error: err.Error()}
 		c.JSON(http.StatusBadRequest, res)
 		return
-	}
-
-	reqTransfer := dto.ReqDigitalWalletTransfer{
-		SenderID:    auth.UserID,
-		RecipientID: req.RecipientID,
-		Amount:      req.Amount,
 	}
 
 	resTransfer, err := d.usecaseDigitalWallet.Transfer(c, reqTransfer)
@@ -59,11 +44,7 @@ func (d *DigitalWallet) Transfer(c *gin.Context) {
 		return
 	}
 
-	res := gocheckhttp.ResDigitalWalletTransfer{
-		Data: gocheckhttp.ResDataDigitalWalletTransfer{
-			ID: resTransfer.ID,
-		},
-	}
+	res := resTransfer.ToResHTTP()
 
 	c.JSON(http.StatusOK, res)
 }
