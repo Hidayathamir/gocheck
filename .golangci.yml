@@ -62,7 +62,6 @@ linters: # use all linters that not deprecate, except some linters we do not lik
     - importas
     - inamedparam
     - interfacebloat
-    - ireturn
     - loggercheck
     - maintidx
     - makezero
@@ -105,6 +104,7 @@ linters: # use all linters that not deprecate, except some linters we do not lik
     - exhaustruct # force all struct field should be defined
     - gochecknoglobals # force no global var
     - goerr113 # force to use static error
+    - ireturn # force return concrete type
     - lll # force line max char
     - nlreturn # force blank line above return
     - nonamedreturns

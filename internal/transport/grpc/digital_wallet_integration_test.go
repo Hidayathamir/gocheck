@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Hidayathamir/gocheck/internal/usecase"
+	"github.com/Hidayathamir/gocheck/internal/usecase/injection"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpcmiddleware"
 	"github.com/Hidayathamir/gocheck/pkg/m"
 	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
@@ -22,7 +22,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		cfg, _, pg, redis := setup(t)
 
-		usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+		usecaseDigitalWallet := injection.InitUsecaseDigitalWallet(cfg, pg, redis)
 
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
@@ -47,7 +47,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		cfg, _, pg, redis := setup(t)
 
-		usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+		usecaseDigitalWallet := injection.InitUsecaseDigitalWallet(cfg, pg, redis)
 
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
@@ -68,7 +68,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		cfg, _, pg, redis := setup(t)
 
-		usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+		usecaseDigitalWallet := injection.InitUsecaseDigitalWallet(cfg, pg, redis)
 
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
@@ -93,7 +93,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		cfg, _, pg, redis := setup(t)
 
-		usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+		usecaseDigitalWallet := injection.InitUsecaseDigitalWallet(cfg, pg, redis)
 
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
@@ -118,7 +118,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		cfg, _, pg, redis := setup(t)
 
-		usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+		usecaseDigitalWallet := injection.InitUsecaseDigitalWallet(cfg, pg, redis)
 
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
@@ -143,7 +143,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		cfg, _, pg, redis := setup(t)
 
-		usecaseDigitalWallet := usecase.InitUsecaseDigitalWallet(cfg, pg, redis)
+		usecaseDigitalWallet := injection.InitUsecaseDigitalWallet(cfg, pg, redis)
 
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
