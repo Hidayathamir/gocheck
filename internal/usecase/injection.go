@@ -11,7 +11,6 @@ import (
 func InitUsecaseDigitalWallet(cfg *config.Config, pg *db.Postgres, redis *cache.Redis) *DigitalWallet {
 	cacheDigitalWallet := cache.NewDigitalWallet(cfg, redis)
 	repoDigitalWallet := repo.NewDigitalWallet(cfg, pg, cacheDigitalWallet)
-
 	usecaseDigitalWallet := NewDigitalWallet(cfg, pg.TxManager, repoDigitalWallet)
 	return usecaseDigitalWallet
 }
