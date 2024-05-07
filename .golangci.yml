@@ -88,6 +88,7 @@ linters: # use all linters that not deprecate, except some linters we do not lik
     - spancheck
     - sqlclosecheck
     - stylecheck
+    - tagalign
     - tagliatelle
     - tenv
     - testableexamples
@@ -108,7 +109,6 @@ linters: # use all linters that not deprecate, except some linters we do not lik
     - nlreturn # force blank line above return
     - nonamedreturns
     - nosprintfhostport # force to use net.JoinHostPort
-    - tagalign # force tag should be align
     - testpackage # force to use package_test format
     - varnamelen # force var name should not short
     - wrapcheck # force wrap error
