@@ -6,6 +6,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/dto"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
+	"github.com/Hidayathamir/gocheck/pkg/ctxutil"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )
@@ -37,6 +38,7 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqDigitalWalletTr
 
 	logrus.WithFields(logrus.Fields{
 		"funcName": trace.FuncName(),
+		"traceid":  ctxutil.GetTraceIDFromCtx(ctx),
 		"in": logrus.Fields{
 			"req": req,
 		},

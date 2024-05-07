@@ -3,14 +3,18 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"net"
 
 	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpcmiddleware"
+	"github.com/Hidayathamir/gocheck/pkg/m"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 //nolint:gomnd
@@ -28,8 +32,10 @@ func main() {
 	// prepare request
 	ctx := context.Background()
 	auth := gocheckgrpcmiddleware.Authorization{UserID: 1}
-	ctx, err = gocheckgrpcmiddleware.SetAuthToCtx(ctx, auth)
+	jsonByte, err := json.Marshal(auth)
 	fatalIfErr(err)
+
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte), m.TraceID, uuid.NewString()))
 
 	req := &gocheckgrpc.ReqDigitalWalletTransfer{
 		RecipientId: 2,

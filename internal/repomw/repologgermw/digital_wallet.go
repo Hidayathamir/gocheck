@@ -6,6 +6,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/entity"
 	"github.com/Hidayathamir/gocheck/internal/repo"
+	"github.com/Hidayathamir/gocheck/pkg/ctxutil"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )
@@ -37,6 +38,7 @@ func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (entity.User, 
 
 	logrus.WithFields(logrus.Fields{
 		"funcName": trace.FuncName(),
+		"traceid":  ctxutil.GetTraceIDFromCtx(ctx),
 		"in": logrus.Fields{
 			"id": id,
 		},
@@ -60,6 +62,7 @@ func (d *DigitalWallet) CreateTransaction(ctx context.Context, transaction entit
 
 	logrus.WithFields(logrus.Fields{
 		"funcName": trace.FuncName(),
+		"traceid":  ctxutil.GetTraceIDFromCtx(ctx),
 		"in": logrus.Fields{
 			"transaction": transaction,
 		},
@@ -83,6 +86,7 @@ func (d *DigitalWallet) UpdateUserBalance(ctx context.Context, userID uint, bala
 
 	logrus.WithFields(logrus.Fields{
 		"funcName": trace.FuncName(),
+		"traceid":  ctxutil.GetTraceIDFromCtx(ctx),
 		"in": logrus.Fields{
 			"userID":  userID,
 			"balance": balance,

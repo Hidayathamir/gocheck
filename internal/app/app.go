@@ -14,7 +14,9 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
 	"github.com/Hidayathamir/gocheck/internal/repo/db/migration/migrate"
 	transportgrpc "github.com/Hidayathamir/gocheck/internal/transport/grpc"
+	"github.com/Hidayathamir/gocheck/internal/transport/grpc/grpcmiddleware"
 	transporthttp "github.com/Hidayathamir/gocheck/internal/transport/http"
+	"github.com/Hidayathamir/gocheck/internal/transport/http/httpmiddleware"
 	"github.com/Hidayathamir/gocheck/internal/usecase/injection"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/gin-gonic/gin"
@@ -51,7 +53,7 @@ func Run() { //nolint:funlen
 	logrus.Info("initializing grpc server in a goroutine so that it won't block the graceful shutdown handling below")
 	var grpcServer *grpc.Server
 	go func() {
-		grpcServer = grpc.NewServer()
+		grpcServer = grpc.NewServer(grpc.UnaryInterceptor(grpcmiddleware.TraceID))
 
 		registerGRPCServer(
 			grpcServer,
@@ -70,7 +72,8 @@ func Run() { //nolint:funlen
 	logrus.Info("initializing http server in a goroutine so that it won't block the graceful shutdown handling below")
 	var httpServer *http.Server
 	go func() {
-		ginEngine := gin.New()
+		ginEngine := gin.Default()
+		ginEngine.Use(httpmiddleware.TraceID)
 
 		registerHTTPRouter(
 			ginEngine,

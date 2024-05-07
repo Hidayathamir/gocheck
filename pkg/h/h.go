@@ -6,6 +6,9 @@ const (
 
 	// Authorization represents the Authorization header keyword.
 	Authorization = "Authorization"
+
+	// XTraceID represents the X-Trace-Id header keyword.
+	XTraceID = "X-Trace-Id"
 )
 
 const (
