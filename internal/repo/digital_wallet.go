@@ -16,8 +16,11 @@ import (
 
 // IDigitalWallet defines the interface for the DigitalWallet repository.
 type IDigitalWallet interface {
+	// GetUserByID get user by id from cache or database.
 	GetUserByID(ctx context.Context, id uint) (entity.User, error)
+	// CreateTransaction create new transaction record.
 	CreateTransaction(ctx context.Context, transaction entity.Transaction) (uint, error)
+	// UpdateUserBalance update user balance.
 	UpdateUserBalance(ctx context.Context, userID uint, balance int) error
 }
 

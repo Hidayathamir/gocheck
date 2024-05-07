@@ -16,8 +16,11 @@ import (
 
 // IDigitalWallet defines the interface for the DigitalWallet repository.
 type IDigitalWallet interface {
+	// GetUserByID get user by id from cache.
 	GetUserByID(ctx context.Context, id uint) (entity.User, error)
+	// SetUserByID set user by id to cache.
 	SetUserByID(ctx context.Context, user entity.User, expire time.Duration) error
+	// DelUserByID delete user by id in cache.
 	DelUserByID(ctx context.Context, id uint) error
 }
 

@@ -17,6 +17,7 @@ import (
 
 // IDigitalWallet defines the interface for the DigitalWallet usecase.
 type IDigitalWallet interface {
+	// Transfer transfers money from sender to recipient.
 	Transfer(ctx context.Context, req dto.ReqDigitalWalletTransfer) (dto.ResDigitalWalletTransfer, error)
 }
 
