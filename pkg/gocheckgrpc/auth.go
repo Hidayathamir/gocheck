@@ -1,4 +1,4 @@
-package gocheckgrpcmiddleware
+package gocheckgrpc
 
 // Authorization represents the user authorization information.
 type Authorization struct {

@@ -3,7 +3,7 @@ module github.com/Hidayathamir/gocheck
 go 1.22.1
 
 require (
-	github.com/Hidayathamir/protobuf v0.0.0-20240425171123-5cbf62e1a386
+	github.com/Hidayathamir/protobuf v0.0.0-20240508031814-a43c47d71a83
 	github.com/Hidayathamir/txmanager v0.0.1
 	github.com/alicebob/miniredis/v2 v2.32.1
 	github.com/gin-gonic/gin v1.9.1

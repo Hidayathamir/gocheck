@@ -1,4 +1,4 @@
-package gocheckhttpmiddleware
+package gocheckhttp
 
 // Authorization represents authorization information for HTTP requests.
 type Authorization struct {

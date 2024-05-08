@@ -6,10 +6,10 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpcmiddleware"
+	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
 	"github.com/Hidayathamir/gocheck/pkg/m"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
-	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
+	protobufgocheck "github.com/Hidayathamir/protobuf/gocheck"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -27,17 +27,17 @@ func main() {
 	}()
 
 	// new digital wallet client grpc
-	client := gocheckgrpc.NewDigitalWalletClient(conn)
+	client := protobufgocheck.NewDigitalWalletClient(conn)
 
 	// prepare request
 	ctx := context.Background()
-	auth := gocheckgrpcmiddleware.Authorization{UserID: 1}
+	auth := gocheckgrpc.Authorization{UserID: 1}
 	jsonByte, err := json.Marshal(auth)
 	fatalIfErr(err)
 
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte), m.TraceID, uuid.NewString()))
 
-	req := &gocheckgrpc.ReqDigitalWalletTransfer{
+	req := &protobufgocheck.ReqDigitalWalletTransfer{
 		RecipientId: 2,
 		Amount:      10000,
 	}

@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/Hidayathamir/gocheck/internal/usecase/injection"
-	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpcmiddleware"
+	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
 	"github.com/Hidayathamir/gocheck/pkg/m"
-	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
+	protobufgocheck "github.com/Hidayathamir/protobuf/gocheck"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/metadata"
@@ -27,12 +27,12 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 		ctx := context.Background()
-		auth := gocheckgrpcmiddleware.Authorization{UserID: 1}
+		auth := gocheckgrpc.Authorization{UserID: 1}
 		jsonByte, err := json.Marshal(auth)
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &gocheckgrpc.ReqDigitalWalletTransfer{
+		req := &protobufgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      10000,
 		}
@@ -53,7 +53,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		ctx := context.Background()
 
-		req := &gocheckgrpc.ReqDigitalWalletTransfer{
+		req := &protobufgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      10000,
 		}
@@ -73,12 +73,12 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 		ctx := context.Background()
-		auth := gocheckgrpcmiddleware.Authorization{UserID: 1000000}
+		auth := gocheckgrpc.Authorization{UserID: 1000000}
 		jsonByte, err := json.Marshal(auth)
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &gocheckgrpc.ReqDigitalWalletTransfer{
+		req := &protobufgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      10000,
 		}
@@ -98,12 +98,12 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 		ctx := context.Background()
-		auth := gocheckgrpcmiddleware.Authorization{UserID: 1}
+		auth := gocheckgrpc.Authorization{UserID: 1}
 		jsonByte, err := json.Marshal(auth)
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &gocheckgrpc.ReqDigitalWalletTransfer{
+		req := &protobufgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 123123123123,
 			Amount:      10000,
 		}
@@ -123,12 +123,12 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 		ctx := context.Background()
-		auth := gocheckgrpcmiddleware.Authorization{UserID: 1}
+		auth := gocheckgrpc.Authorization{UserID: 1}
 		jsonByte, err := json.Marshal(auth)
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &gocheckgrpc.ReqDigitalWalletTransfer{
+		req := &protobufgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 1,
 			Amount:      10000,
 		}
@@ -148,12 +148,12 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		tDigitalWallet := NewDigitalWallet(cfg, usecaseDigitalWallet)
 
 		ctx := context.Background()
-		auth := gocheckgrpcmiddleware.Authorization{UserID: 1}
+		auth := gocheckgrpc.Authorization{UserID: 1}
 		jsonByte, err := json.Marshal(auth)
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &gocheckgrpc.ReqDigitalWalletTransfer{
+		req := &protobufgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      100,
 		}

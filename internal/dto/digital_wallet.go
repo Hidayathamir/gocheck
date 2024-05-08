@@ -7,7 +7,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/transport/http/httpmiddleware"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
-	gocheckgrpc "github.com/Hidayathamir/protobuf/gocheck"
+	protobufgocheck "github.com/Hidayathamir/protobuf/gocheck"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,7 +19,7 @@ type ReqDigitalWalletTransfer struct {
 }
 
 // LoadFromReqGRPC laods data from request grpc.
-func (r *ReqDigitalWalletTransfer) LoadFromReqGRPC(ctx context.Context, req *gocheckgrpc.ReqDigitalWalletTransfer) error {
+func (r *ReqDigitalWalletTransfer) LoadFromReqGRPC(ctx context.Context, req *protobufgocheck.ReqDigitalWalletTransfer) error {
 	auth, err := grpcmiddleware.GetAuthFromCtx(ctx)
 	if err != nil {
 		return trace.Wrap(err)
@@ -58,8 +58,8 @@ type ResDigitalWalletTransfer struct {
 }
 
 // ToResGRPC converts response to gRPC format.
-func (r *ResDigitalWalletTransfer) ToResGRPC() *gocheckgrpc.ResDigitalWalletTransfer {
-	return &gocheckgrpc.ResDigitalWalletTransfer{
+func (r *ResDigitalWalletTransfer) ToResGRPC() *protobufgocheck.ResDigitalWalletTransfer {
+	return &protobufgocheck.ResDigitalWalletTransfer{
 		Id: uint64(r.ID),
 	}
 }

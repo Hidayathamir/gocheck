@@ -5,7 +5,6 @@ import (
 	"context"
 
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
-	"github.com/Hidayathamir/gocheck/pkg/gocheckhttpmiddleware"
 	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )
@@ -19,7 +18,7 @@ func main() {
 
 	// prepare request
 	ctx := context.Background()
-	auth := gocheckhttpmiddleware.Authorization{UserID: 1}
+	auth := gocheckhttp.Authorization{UserID: 1}
 
 	req := gocheckhttp.ReqDigitalWalletTransfer{
 		RecipientID: 2,
