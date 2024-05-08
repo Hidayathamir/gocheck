@@ -8,7 +8,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/usecase/injection"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
 	"github.com/Hidayathamir/gocheck/pkg/m"
-	protobufgocheck "github.com/Hidayathamir/protobuf/gocheck"
+	pbgocheck "github.com/Hidayathamir/protobuf/gocheck"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/metadata"
@@ -32,7 +32,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &protobufgocheck.ReqDigitalWalletTransfer{
+		req := &pbgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      10000,
 		}
@@ -53,7 +53,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 
 		ctx := context.Background()
 
-		req := &protobufgocheck.ReqDigitalWalletTransfer{
+		req := &pbgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      10000,
 		}
@@ -78,7 +78,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &protobufgocheck.ReqDigitalWalletTransfer{
+		req := &pbgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      10000,
 		}
@@ -103,7 +103,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &protobufgocheck.ReqDigitalWalletTransfer{
+		req := &pbgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 123123123123,
 			Amount:      10000,
 		}
@@ -128,7 +128,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &protobufgocheck.ReqDigitalWalletTransfer{
+		req := &pbgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 1,
 			Amount:      10000,
 		}
@@ -153,7 +153,7 @@ func TestIntegrationDigitalWalletTransfer(t *testing.T) {
 		require.NoError(t, err)
 		ctx = metadata.NewIncomingContext(ctx, metadata.Pairs(m.Authorization, string(jsonByte)))
 
-		req := &protobufgocheck.ReqDigitalWalletTransfer{
+		req := &pbgocheck.ReqDigitalWalletTransfer{
 			RecipientId: 2,
 			Amount:      100,
 		}
