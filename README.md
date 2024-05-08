@@ -34,7 +34,7 @@ Checkout Team Go Code Convention.
 - [x] simulate real case scenario.
 - [x] integration test.
 - [ ] unit test, (easy to implement because seperated by interface between layer but not implement yet).
-- [x] integrated trace id front to back..
+- [x] integrated trace id front to back.
 - [x] grpc server.
     - [x] graceful shutdown.
 - [x] http server.
