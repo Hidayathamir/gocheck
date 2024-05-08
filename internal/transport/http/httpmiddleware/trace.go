@@ -16,4 +16,6 @@ func TraceID(c *gin.Context) {
 		traceID = uuid.NewString()
 	}
 	ctxutil.SetTraceIDToGinCtx(c, traceID)
+
+	c.Header(h.XTraceID, traceID)
 }

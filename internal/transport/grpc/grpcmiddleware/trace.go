@@ -6,6 +6,7 @@ import (
 	"github.com/Hidayathamir/gocheck/pkg/ctxutil"
 	"github.com/Hidayathamir/gocheck/pkg/m"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
@@ -18,6 +19,12 @@ func TraceID(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, hand
 	ctx = ctxutil.SetTraceIDToCtx(ctx, traceID)
 
 	res, err := handler(ctx, req)
+
+	md := metadata.Pairs(m.TraceID, traceID)
+	errSendHeader := grpc.SendHeader(ctx, md)
+	if errSendHeader != nil {
+		logrus.WithField(m.TraceID, traceID).Warn(err)
+	}
 
 	return res, err
 }
