@@ -26,10 +26,8 @@ func main() {
 		warnIfErr(err)
 	}()
 
-	// new digital wallet client grpc
 	client := pbgocheck.NewDigitalWalletClient(conn)
 
-	// prepare request
 	ctx := context.Background()
 	auth := gocheckgrpc.Authorization{UserID: 1}
 	jsonByte, err := json.Marshal(auth)
@@ -42,11 +40,9 @@ func main() {
 		Amount:      10000,
 	}
 
-	// hit api digital wallet transfer via grpc
 	res, err := client.Transfer(ctx, req)
 	fatalIfErr(err)
 
-	// print response
 	logrus.Info("transfer id = ", res.GetId())
 }
 
