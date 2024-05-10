@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/spf13/viper"
 )
 
@@ -21,14 +21,14 @@ func Load(configPath string) (*Config, error) {
 
 	err := v.ReadInConfig()
 	if err != nil {
-		return nil, trace.Wrap(err)
+		return nil, errutil.Wrap(err)
 	}
 
 	cfg := &Config{Viper: v}
 
 	err = cfg.Validate()
 	if err != nil {
-		return nil, trace.Wrap(err)
+		return nil, errutil.Wrap(err)
 	}
 
 	return cfg, nil
@@ -40,14 +40,14 @@ func (c *Config) Validate() error {
 	case "dev", "prod":
 	default:
 		err := fmt.Errorf("unknown app environment '%s'", c.GetAppEnvironment())
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	switch c.GetLoggerLogLevel() {
 	case "panic", "fatal", "error", "warn", "warning", "info", "debug", "trace":
 	default:
 		err := fmt.Errorf("unknown logger log level '%s'", c.GetLoggerLogLevel())
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	return nil

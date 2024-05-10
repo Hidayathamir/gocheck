@@ -10,7 +10,7 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/entity"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/sirupsen/logrus"
 )
 
@@ -55,7 +55,7 @@ func (d *DigitalWallet) keyUserByID(id uint) string {
 func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (entity.User, error) {
 	val, err := d.redis.client.Get(ctx, d.keyUserByID(id)).Result()
 	if err != nil {
-		return entity.User{}, trace.Wrap(err)
+		return entity.User{}, errutil.Wrap(err)
 	}
 
 	user := entity.User{}
@@ -65,10 +65,10 @@ func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (entity.User, 
 
 		errDel := d.DelUserByID(ctx, id)
 		if errDel != nil {
-			logrus.Warn(trace.Wrap(errDel))
+			logrus.Warn(errutil.Wrap(errDel))
 		}
 
-		return entity.User{}, trace.Wrap(err)
+		return entity.User{}, errutil.Wrap(err)
 	}
 
 	return user, nil
@@ -78,12 +78,12 @@ func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (entity.User, 
 func (d *DigitalWallet) SetUserByID(ctx context.Context, user entity.User, expire time.Duration) error {
 	jsonByte, err := json.Marshal(user)
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	err = d.redis.client.Set(ctx, d.keyUserByID(user.ID), string(jsonByte), expire).Err()
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	return nil
@@ -94,7 +94,7 @@ func (d *DigitalWallet) DelUserByID(ctx context.Context, id uint) error {
 	err := d.redis.client.Del(ctx, d.keyUserByID(id)).Err()
 	if err != nil {
 		err := fmt.Errorf("error delete redis cache key '%s': %w", d.keyUserByID(id), err)
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 	return nil
 }

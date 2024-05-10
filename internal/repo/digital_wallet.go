@@ -8,9 +8,9 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/entity/table"
 	"github.com/Hidayathamir/gocheck/internal/repo/cache"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/gocheck/pkg/gocheck"
 	"github.com/Hidayathamir/gocheck/pkg/q"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )
 
@@ -58,12 +58,12 @@ func (d *DigitalWallet) GetUserByID(ctx context.Context, id uint) (entity.User, 
 	user = entity.User{}
 	err = db.Last(&user, id).Error
 	if err != nil {
-		return entity.User{}, trace.Wrap(err)
+		return entity.User{}, errutil.Wrap(err)
 	}
 
 	err = d.cacheDigitalWallet.SetUserByID(ctx, user, gocheck.DefaultCacheExpire)
 	if err != nil {
-		logrus.Warn(trace.Wrap(err))
+		logrus.Warn(errutil.Wrap(err))
 	}
 
 	return user, nil
@@ -79,7 +79,7 @@ func (d *DigitalWallet) CreateTransaction(ctx context.Context, transaction entit
 
 	err := db.Create(&transaction).Error
 	if err != nil {
-		return 0, trace.Wrap(err)
+		return 0, errutil.Wrap(err)
 	}
 
 	return transaction.ID, err
@@ -99,7 +99,7 @@ func (d *DigitalWallet) UpdateUserBalance(ctx context.Context, userID uint, bala
 		Update(table.User.Balance, balance).
 		Error
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	return nil

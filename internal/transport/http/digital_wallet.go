@@ -6,8 +6,8 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/dto"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,7 +30,7 @@ func (d *DigitalWallet) Transfer(c *gin.Context) {
 	reqTransfer := dto.ReqDigitalWalletTransfer{}
 	err := reqTransfer.LoadFromReqHTTP(c)
 	if err != nil {
-		err := trace.Wrap(err)
+		err := errutil.Wrap(err)
 		res := gocheckhttp.ResDigitalWalletTransfer{Error: err.Error()}
 		c.JSON(http.StatusBadRequest, res)
 		return
@@ -38,7 +38,7 @@ func (d *DigitalWallet) Transfer(c *gin.Context) {
 
 	resTransfer, err := d.usecaseDigitalWallet.Transfer(c, reqTransfer)
 	if err != nil {
-		err := trace.Wrap(err)
+		err := errutil.Wrap(err)
 		res := gocheckhttp.ResDigitalWalletTransfer{Error: err.Error()}
 		c.JSON(http.StatusBadRequest, res)
 		return

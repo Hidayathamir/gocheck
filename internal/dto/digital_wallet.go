@@ -5,8 +5,8 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/transport/grpc/grpcmiddleware"
 	"github.com/Hidayathamir/gocheck/internal/transport/http/httpmiddleware"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
 	pbgocheck "github.com/Hidayathamir/protobuf/gocheck"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +22,7 @@ type ReqDigitalWalletTransfer struct {
 func (r *ReqDigitalWalletTransfer) LoadFromReqGRPC(ctx context.Context, req *pbgocheck.ReqDigitalWalletTransfer) error {
 	auth, err := grpcmiddleware.GetAuthFromCtx(ctx)
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	r.SenderID = auth.UserID
@@ -36,13 +36,13 @@ func (r *ReqDigitalWalletTransfer) LoadFromReqGRPC(ctx context.Context, req *pbg
 func (r *ReqDigitalWalletTransfer) LoadFromReqHTTP(c *gin.Context) error {
 	auth, err := httpmiddleware.GetAuthFromGinCtxHeader(c)
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	req := gocheckhttp.ReqDigitalWalletTransfer{}
 	err = c.ShouldBindJSON(&req)
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	r.SenderID = auth.UserID

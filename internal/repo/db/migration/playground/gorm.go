@@ -5,7 +5,7 @@ import (
 
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/repo/db"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -29,6 +29,6 @@ func gormPlayground(fn func(pg *gorm.DB)) {
 
 func fatalIfErr(err error) {
 	if err != nil {
-		logrus.Fatal(trace.Wrap(err, trace.WithSkip(1)))
+		logrus.Fatal(errutil.Wrap(err, errutil.WithSkip(1)))
 	}
 }

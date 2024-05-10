@@ -8,9 +8,9 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/dto"
 	"github.com/Hidayathamir/gocheck/internal/entity"
 	"github.com/Hidayathamir/gocheck/internal/repo"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/gocheck/pkg/gocheck"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckerror"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/Hidayathamir/txmanager"
 	"github.com/go-playground/validator/v10"
 )
@@ -47,24 +47,24 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqDigitalWalletTr
 	err := d.validateReqTransfer(ctx, req)
 	if err != nil {
 		err := fmt.Errorf("%w: %w", gocheckerror.ErrInvalidRequest, err)
-		return dto.ResDigitalWalletTransfer{}, trace.Wrap(err)
+		return dto.ResDigitalWalletTransfer{}, errutil.Wrap(err)
 	}
 
 	var transactionID uint
 	err = d.txManager.SQLTransaction(ctx, func(ctx context.Context) error {
 		sender, err := d.repoDigitalWallet.GetUserByID(ctx, req.SenderID)
 		if err != nil {
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		if req.Amount > sender.Balance {
 			err = gocheckerror.ErrInsufficientFunds
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		recipient, err := d.repoDigitalWallet.GetUserByID(ctx, req.RecipientID)
 		if err != nil {
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		transactionID, err = d.repoDigitalWallet.CreateTransaction(ctx, entity.Transaction{
@@ -73,18 +73,18 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqDigitalWalletTr
 			Amount:      req.Amount,
 		})
 		if err != nil {
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		err = d.updateSenderAndRecipientBalance(ctx, sender, recipient, req.Amount)
 		if err != nil {
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		return nil
 	})
 	if err != nil {
-		return dto.ResDigitalWalletTransfer{}, trace.Wrap(err)
+		return dto.ResDigitalWalletTransfer{}, errutil.Wrap(err)
 	}
 
 	res := dto.ResDigitalWalletTransfer{ID: transactionID}
@@ -95,12 +95,12 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req dto.ReqDigitalWalletTr
 func (d *DigitalWallet) validateReqTransfer(_ context.Context, req dto.ReqDigitalWalletTransfer) error {
 	err := d.validator.Struct(req)
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	if req.Amount < gocheck.MinimumTransferAmount {
 		err := fmt.Errorf("amount can not be less than %d", gocheck.MinimumTransferAmount)
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	return nil
@@ -110,18 +110,18 @@ func (d *DigitalWallet) updateSenderAndRecipientBalance(ctx context.Context, sen
 	err := d.txManager.SQLTransaction(ctx, func(ctx context.Context) error {
 		err := d.repoDigitalWallet.UpdateUserBalance(ctx, sender.ID, sender.Balance-amount)
 		if err != nil {
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		err = d.repoDigitalWallet.UpdateUserBalance(ctx, recipient.ID, recipient.Balance+amount)
 		if err != nil {
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		return nil
 	})
 	if err != nil {
-		return trace.Wrap(err)
+		return errutil.Wrap(err)
 	}
 
 	return nil

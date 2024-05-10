@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 )
@@ -36,13 +36,13 @@ func NewRedis(cfg *config.Config) (*Redis, error) {
 
 		logrus.
 			WithField("attempt left", maxAttemptInitRedis-i-1).
-			Warn(trace.Wrap(errInitRedis))
+			Warn(errutil.Wrap(errInitRedis))
 
 		time.Sleep(time.Second)
 	}
 	if errInitRedis != nil {
 		errInitRedis := fmt.Errorf("error ping redis %d times: %w", maxAttemptInitRedis, errInitRedis)
-		return nil, trace.Wrap(errInitRedis)
+		return nil, errutil.Wrap(errInitRedis)
 	}
 
 	redis := &Redis{client: redisClient}

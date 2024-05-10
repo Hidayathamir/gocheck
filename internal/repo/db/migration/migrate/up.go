@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -36,7 +36,7 @@ func Up(db *gorm.DB, options ...UpOption) error {
 	for i := 0; i < maxAttemptMigrateUp; i++ {
 		sql, err := db.DB()
 		if err != nil {
-			return trace.Wrap(err)
+			return errutil.Wrap(err)
 		}
 
 		fileMigrationSource := &migrate.FileMigrationSource{Dir: option.Dir}
@@ -49,13 +49,13 @@ func Up(db *gorm.DB, options ...UpOption) error {
 
 		logrus.
 			WithField("attempt_left", maxAttemptMigrateUp-i-1).
-			Warn(trace.Wrap(errMigrateUp))
+			Warn(errutil.Wrap(errMigrateUp))
 
 		time.Sleep(time.Second)
 	}
 	if errMigrateUp != nil {
 		errMigrateUp := fmt.Errorf("error migrate up %d times: %w", maxAttemptMigrateUp, errMigrateUp)
-		return trace.Wrap(errMigrateUp)
+		return errutil.Wrap(errMigrateUp)
 	}
 
 	logrus.Infof("migration success, %d applied 🟢", countMigrationApplied)

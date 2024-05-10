@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/Hidayathamir/gocheck/internal/config"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/txmanager"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
@@ -54,18 +54,18 @@ func NewPostgres(cfg *config.Config, options ...NewPostgresOption) (*Postgres, e
 
 		logrus.
 			WithField("attempt left", maxAttemptInitDB-i-1).
-			Warn(trace.Wrap(errInitDB))
+			Warn(errutil.Wrap(errInitDB))
 
 		time.Sleep(time.Second)
 	}
 	if errInitDB != nil {
 		errInitDB := fmt.Errorf("error initialize db session %d times: %w", maxAttemptInitDB, errInitDB)
-		return nil, trace.Wrap(errInitDB)
+		return nil, errutil.Wrap(errInitDB)
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
-		return nil, trace.Wrap(err)
+		return nil, errutil.Wrap(err)
 	}
 
 	sqlDB.SetMaxIdleConns(cfg.GetGormMaxIdleConns())

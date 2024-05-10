@@ -9,9 +9,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
 	"github.com/Hidayathamir/gocheck/pkg/h"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/sirupsen/logrus"
 )
 
@@ -55,7 +55,7 @@ func main() {
 	isStatusCode2xx := string(httpRes.Status[0]) == "2"
 	if !isStatusCode2xx || resBody.Error != "" {
 		err := errors.New(resBody.Error)
-		logrus.Fatal(trace.Wrap(err))
+		logrus.Fatal(errutil.Wrap(err))
 	}
 
 	logrus.Info("transfer id = ", resBody.Data.ID)
@@ -63,12 +63,12 @@ func main() {
 
 func fatalIfErr(err error) {
 	if err != nil {
-		logrus.Fatal(trace.Wrap(err, trace.WithSkip(1)))
+		logrus.Fatal(errutil.Wrap(err, errutil.WithSkip(1)))
 	}
 }
 
 func warnIfErr(err error) {
 	if err != nil {
-		logrus.Warn(trace.Wrap(err, trace.WithSkip(1)))
+		logrus.Warn(errutil.Wrap(err, errutil.WithSkip(1)))
 	}
 }

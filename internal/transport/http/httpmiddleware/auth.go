@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckerror"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckhttp"
 	"github.com/Hidayathamir/gocheck/pkg/h"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +17,7 @@ func GetAuthFromGinCtxHeader(c *gin.Context) (gocheckhttp.Authorization, error) 
 	err := json.Unmarshal([]byte(c.GetHeader(h.Authorization)), &auth)
 	if err != nil {
 		err = fmt.Errorf("%w: %w", gocheckerror.ErrUnauthenticated, err)
-		return gocheckhttp.Authorization{}, trace.Wrap(err)
+		return gocheckhttp.Authorization{}, errutil.Wrap(err)
 	}
 
 	return auth, nil

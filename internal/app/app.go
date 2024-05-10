@@ -18,7 +18,7 @@ import (
 	transporthttp "github.com/Hidayathamir/gocheck/internal/transport/http"
 	"github.com/Hidayathamir/gocheck/internal/transport/http/httpmiddleware"
 	"github.com/Hidayathamir/gocheck/internal/usecase/injection"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -89,7 +89,7 @@ func Run() { //nolint:funlen
 		logrus.WithField("address", addr).Info("http server running 🟢")
 		err := httpServer.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
-			logrus.Fatal(trace.Wrap(err))
+			logrus.Fatal(errutil.Wrap(err))
 		}
 	}()
 
@@ -135,12 +135,12 @@ func Run() { //nolint:funlen
 
 func fatalIfErr(err error) {
 	if err != nil {
-		logrus.Fatal(trace.Wrap(err, trace.WithSkip(1)))
+		logrus.Fatal(errutil.Wrap(err, errutil.WithSkip(1)))
 	}
 }
 
 func warnIfErr(err error) {
 	if err != nil {
-		logrus.Warn(trace.Wrap(err, trace.WithSkip(1)))
+		logrus.Warn(errutil.Wrap(err, errutil.WithSkip(1)))
 	}
 }

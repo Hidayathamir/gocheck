@@ -6,7 +6,7 @@ import (
 	"github.com/Hidayathamir/gocheck/internal/config"
 	"github.com/Hidayathamir/gocheck/internal/dto"
 	"github.com/Hidayathamir/gocheck/internal/usecase"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	pbgocheck "github.com/Hidayathamir/protobuf/gocheck"
 )
 
@@ -33,12 +33,12 @@ func (d *DigitalWallet) Transfer(ctx context.Context, req *pbgocheck.ReqDigitalW
 	reqTransfer := dto.ReqDigitalWalletTransfer{}
 	err := reqTransfer.LoadFromReqGRPC(ctx, req)
 	if err != nil {
-		return nil, trace.Wrap(err)
+		return nil, errutil.Wrap(err)
 	}
 
 	resTransfer, err := d.usecaseDigitalWallet.Transfer(ctx, reqTransfer)
 	if err != nil {
-		return nil, trace.Wrap(err)
+		return nil, errutil.Wrap(err)
 	}
 
 	res := resTransfer.ToResGRPC()

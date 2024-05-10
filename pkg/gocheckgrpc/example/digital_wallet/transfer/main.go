@@ -6,9 +6,9 @@ import (
 	"encoding/json"
 	"net"
 
+	"github.com/Hidayathamir/gocheck/pkg/errutil"
 	"github.com/Hidayathamir/gocheck/pkg/gocheckgrpc"
 	"github.com/Hidayathamir/gocheck/pkg/m"
-	"github.com/Hidayathamir/gocheck/pkg/trace"
 	pbgocheck "github.com/Hidayathamir/protobuf/gocheck"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
@@ -48,12 +48,12 @@ func main() {
 
 func fatalIfErr(err error) {
 	if err != nil {
-		logrus.Fatal(trace.Wrap(err, trace.WithSkip(1)))
+		logrus.Fatal(errutil.Wrap(err, errutil.WithSkip(1)))
 	}
 }
 
 func warnIfErr(err error) {
 	if err != nil {
-		logrus.Warn(trace.Wrap(err, trace.WithSkip(1)))
+		logrus.Warn(errutil.Wrap(err, errutil.WithSkip(1)))
 	}
 }
